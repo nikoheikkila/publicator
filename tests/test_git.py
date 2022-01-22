@@ -1,13 +1,6 @@
 from unittest.mock import MagicMock
-from pytest import fixture
-from pytest_mock import MockerFixture
 
 from publicator import git
-from publicator import shell
-
-@fixture
-def mock_shell(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch.object(shell, 'run', autospec=True)
 
 def test_get_current_branch(mock_shell: MagicMock):
     mock_shell.return_value = ["main"]

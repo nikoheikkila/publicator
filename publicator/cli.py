@@ -1,6 +1,6 @@
 import typer
 
-from publicator import git, poetry
+from publicator import git, poetry, project
 
 app = typer.Typer(name="publicator")
 
@@ -24,5 +24,8 @@ def cli(version: str = typer.Argument(...)) -> None:
 
     typer.echo("Running tests")
     poetry.run_tests()
+
+    current_version = project.get_version()
+    typer.echo(f"Bumping current version {current_version} to {version}")
 
     typer.echo("OK")
