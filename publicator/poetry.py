@@ -1,3 +1,4 @@
+from typing import Optional
 from publicator import shell
 
 
@@ -10,3 +11,16 @@ def run_tests(command: str = "pytest") -> list[str]:
 def ok() -> bool:
     result = shell.run("poetry check").pop()
     return "All set" in result
+
+def build() -> list[str]:
+    return shell.run("poetry build")
+
+def publish(repository: Optional[str] = None, dry_run: bool = True) -> list[str]:
+    command = "poetry publish"
+
+    if repository:
+        command += f" --repository {repository}"
+    if dry_run:
+        command += f" --dry-run"
+
+    return shell.run(command)
