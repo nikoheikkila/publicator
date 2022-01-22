@@ -1,10 +1,13 @@
 import toml
 from pathlib import Path
 
-def get_version() -> str:
+from publicator.semver import Semver
+
+def get_version() -> Semver:
     pyproject = Path.cwd() / "pyproject.toml"
 
     with pyproject.open(mode="r") as f:
         contents = toml.load(f)
 
-    return contents['tool']['poetry']['version']
+    version = contents['tool']['poetry']['version']
+    return Semver.from_string(version)
