@@ -31,3 +31,6 @@ def commit(message: str) -> list[str]:
 
 def create_tag(version: str, message: str) -> list[str]:
     return shell.run(f'git tag -a {version.strip()} -m "{message.strip()}"')
+
+def push() -> list[str]:
+    return shell.run("git push --follow-tags")

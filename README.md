@@ -18,7 +18,6 @@
 ### Upcoming
 
 - Interactive UI
-- Rolls back the project to its previous state in case publishing fails
 - Opens a prefilled GitHub Releases draft after publish
 - See exactly what will be executed with preview mode, without pushing or publishing anything remotely
 

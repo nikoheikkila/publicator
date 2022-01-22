@@ -15,7 +15,7 @@ def ok() -> bool:
 def build() -> list[str]:
     return shell.run("poetry build")
 
-def publish(repository: Optional[str] = None, dry_run: bool = True) -> list[str]:
+def publish(repository: Optional[str] = None, dry_run: bool = False) -> list[str]:
     command = "poetry publish"
 
     if repository:

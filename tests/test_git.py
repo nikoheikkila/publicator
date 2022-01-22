@@ -22,7 +22,7 @@ def test_stash(mock_shell: MagicMock):
     assert git.stash()
 
 def test_pull(mock_shell: MagicMock):
-    mock_shell.return_value = ["Already up-to-date"]
+    mock_shell.return_value = ["Everything up-to-date"]
     assert git.pull()
 
 def test_pop(mock_shell: MagicMock):
@@ -41,3 +41,7 @@ def test_commit_changes(mock_shell: MagicMock):
 def test_creating_tag(mock_shell: MagicMock):
     mock_shell.return_value = [""]
     assert git.create_tag(version="1.2.3", message="Version 1.2.3")
+
+def test_pushing_changes(mock_shell: MagicMock):
+    mock_shell.return_value = ["Everything up-to-date"]
+    assert git.push()
