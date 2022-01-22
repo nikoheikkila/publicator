@@ -15,3 +15,11 @@ def test_poetry_install(mock_shell: MagicMock):
     ]
 
     assert poetry.install()
+
+def test_run_pytest(mock_shell: MagicMock):
+    mock_shell.return_value = ["test session starts"]
+    assert poetry.run_tests()
+
+def test_run_unittest(mock_shell: MagicMock):
+    mock_shell.return_value = ["Ran 1 test in 0.000s"]
+    assert poetry.run_tests(command="python -m unittest")

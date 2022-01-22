@@ -22,4 +22,7 @@ def cli(version: str = typer.Argument(...)) -> None:
     typer.echo("Reinstalling dependencies")
     poetry.install()
 
+    typer.echo("Running tests")
+    poetry.run_tests()
+
     typer.echo("OK")
