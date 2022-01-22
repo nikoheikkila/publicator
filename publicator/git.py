@@ -27,5 +27,7 @@ def add() -> list[str]:
     return shell.run("git add pyproject.toml")
 
 def commit(message: str) -> list[str]:
-
     return shell.run(f'git commit -m "{message.strip()}"')
+
+def create_tag(version: str, message: str) -> list[str]:
+    return shell.run(f'git tag -a {version.strip()} -m "{message.strip()}"')

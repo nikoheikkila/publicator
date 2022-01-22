@@ -37,3 +37,7 @@ def test_commit_changes(mock_shell: MagicMock):
     expected_output = ["1 file changed"]
     mock_shell.return_value = expected_output
     assert git.commit(message="release: 1.2.3") == expected_output
+
+def test_creating_tag(mock_shell: MagicMock):
+    mock_shell.return_value = [""]
+    assert git.create_tag(version="1.2.3", message="Version 1.2.3")

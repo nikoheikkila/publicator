@@ -34,4 +34,7 @@ def cli(version: str = typer.Argument(...)) -> None:
     git.add()
     git.commit(f"release: {version}")
 
+    typer.echo(f"Creating a new tag {version} from HEAD")
+    git.create_tag(version, message=f"Version {version}")
+
     typer.echo("OK")
