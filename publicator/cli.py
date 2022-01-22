@@ -1,6 +1,6 @@
 import typer
 
-from publicator import git
+from publicator import git, poetry
 
 app = typer.Typer(name="publicator")
 
@@ -18,5 +18,8 @@ def cli(version: str = typer.Argument(...)) -> None:
         git.stash()
         git.pull()
         git.pop()
+
+    typer.echo("Reinstalling dependencies")
+    poetry.install()
 
     typer.echo("OK")
