@@ -13,4 +13,10 @@ def cli(version: str = typer.Argument(...)) -> None:
         typer.echo(f"Current checked out branch {current_branch} is not a release branch {release_branches}")
         raise typer.Exit(code=1)
 
+    if not git.is_working_directory_clean():
+        typer.echo("Resetting working directory to a clean state")
+        git.stash()
+        git.pull()
+        git.pop()
+
     typer.echo("OK")

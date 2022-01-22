@@ -7,3 +7,18 @@ def current_branch() -> str:
 
 def release_branches() -> tuple[str, str]:
     return ("main", "master")
+
+def status() -> list[str]:
+    return shell.run("git status --porcelain")
+
+def is_working_directory_clean() -> bool:
+    return len(status()) == 0
+
+def stash() -> list[str]:
+    return shell.run("git stash -u")
+
+def pull() -> list[str]:
+    return shell.run("git pull --rebase")
+
+def pop() -> list[str]:
+    return shell.run("git stash pop")

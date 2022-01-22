@@ -11,6 +11,7 @@ typer = {extras = ["all"], version = "^0.4.0"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+pytest-mock = "^3.6.1"
 
 [tool.poetry.scripts]
 publicator = "publicator.cli:app"
