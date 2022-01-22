@@ -14,7 +14,7 @@ def cli(
     skip_cleaning: bool = typer.Option(default=False, help="Skip repository clean up"),
     yolo: bool = typer.Option(default=False, help="Skip reinstall and test steps"),
     skip_tag: bool = typer.Option(default=False, help="Skip creating a new tag"),
-    skip_publish: bool = typer.Option(default=True, help="Skip publishing the package to the registry"),
+    skip_publish: bool = typer.Option(default=False, help="Skip publishing the package to the registry"),
     skip_push: bool = typer.Option(default=False, help="Skip pushing commits and tags to Git"),
 ) -> None:
     if not any_branch:
