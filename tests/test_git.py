@@ -28,3 +28,12 @@ def test_pull(mock_shell: MagicMock):
 def test_pop(mock_shell: MagicMock):
     mock_shell.return_value = ["Dropped refs"]
     assert git.pop()
+
+def test_add_changes(mock_shell: MagicMock):
+    mock_shell.return_value = [""]
+    assert git.add()
+
+def test_commit_changes(mock_shell: MagicMock):
+    expected_output = ["1 file changed"]
+    mock_shell.return_value = expected_output
+    assert git.commit(message="release: 1.2.3") == expected_output

@@ -31,5 +31,7 @@ def cli(version: str = typer.Argument(...)) -> None:
 
     typer.echo("Committing changes")
     poetry.ok()
+    git.add()
+    git.commit(f"release: {version}")
 
     typer.echo("OK")

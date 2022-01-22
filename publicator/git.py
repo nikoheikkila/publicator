@@ -22,3 +22,10 @@ def pull() -> list[str]:
 
 def pop() -> list[str]:
     return shell.run("git stash pop")
+
+def add() -> list[str]:
+    return shell.run("git add pyproject.toml")
+
+def commit(message: str) -> list[str]:
+
+    return shell.run(f'git commit -m "{message.strip()}"')
