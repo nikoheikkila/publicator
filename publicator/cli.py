@@ -27,5 +27,6 @@ def cli(version: str = typer.Argument(...)) -> None:
 
     current_version = project.get_version()
     typer.echo(f"Bumping current version {current_version} to {version}")
+    project.bump_version(version)
 
     typer.echo("OK")

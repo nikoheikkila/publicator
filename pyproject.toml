@@ -1,14 +1,18 @@
+[build-system]
+requires = [ "poetry-core>=1.0.0",]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "publicator"
 version = "0.1.0"
 description = ""
-authors = ["Niko Heikkilä <niko.heikkila@futurice.com>"]
+authors = [ "Niko Heikkilä <niko.heikkila@futurice.com>",]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-typer = {extras = ["all"], version = "^0.4.0"}
 toml = "^0.10.2"
+mergedeep = "^1.3.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -17,6 +21,6 @@ pytest-mock = "^3.6.1"
 [tool.poetry.scripts]
 publicator = "publicator.cli:app"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry.dependencies.typer]
+extras = [ "all",]
+version = "^0.4.0"
