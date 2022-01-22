@@ -1,8 +1,11 @@
+import os
 from typing import Optional
 import typer
 
 from publicator import git, poetry, project
 from publicator.semver import Semver
+
+preview = os.environ.get("PUBLICATOR_PREVIEW")
 
 app = typer.Typer(name="publicator")
 
@@ -41,57 +44,77 @@ def cli(
     if not skip_push:
         push()
 
-    typer.echo("OK")
+    success(f"Published the new package version. Cheers!")
+
+def info(message: str) -> None:
+    typer.secho(f"📢 {message}", fg=typer.colors.BRIGHT_BLUE)
+
+def success(message: str) -> None:
+    typer.secho(f"🎉 {message}", fg=typer.colors.BRIGHT_GREEN, bold=True)
+
+def fatal(message: str, exit_code: int = 1) -> None:
+    typer.secho(f"❌ {message}", fg=typer.colors.BRIGHT_RED, bold=True)
+    raise typer.Exit(code=exit_code)
 
 def push():
-    typer.echo("Pushing changes to Git")
-    git.push()
+    info("Pushing changes to Git")
+    if not preview:
+        git.push()
 
 def publish_package(repository: str, skip_publish: bool) -> None:
-    typer.echo("Publishing the package to repository")
-    poetry.publish(repository, dry_run=skip_publish)
+    info("Publishing the package to repository")
+    if not preview:
+        poetry.publish(repository, dry_run=skip_publish)
 
 def build_package() -> None:
-    typer.echo("Building the package")
-    poetry.build()
+    info("Building the package")
+    if not preview:
+        poetry.build()
 
 def create_tag(version: Semver) -> None:
-    typer.echo(f"Creating a new tag {version} from HEAD")
-    git.create_tag(version, message=f"Version {version}")
+    info(f"Creating a new tag {version} from HEAD")
+    if not preview:
+        git.create_tag(version, message=f"Version {version}")
 
 def commit_changes(semver: Semver) -> None:
-    typer.echo("Committing changes")
-    poetry.ok()
-    git.add()
-    git.commit(f"release: {semver}")
+    info("Committing changes")
+    if not preview:
+        poetry.ok()
+        git.add()
+        git.commit(f"release: {semver}")
 
 def bump_version(version: str) -> Semver:
     current_version = project.get_version()
-    typer.echo(f"Bumping current version {current_version} to {version}")
+    info(f"Bumping current version from {current_version} to {version}")
+
+    if preview:
+        return current_version
 
     return project.bump_version(version)
 
 def run_tests():
-    typer.echo("Running tests")
-    poetry.run_tests()
+    info("Running tests")
+    if not preview:
+        poetry.run_tests()
 
 def install_dependencies():
-    typer.echo("Reinstalling dependencies")
-    poetry.install()
+    info("Reinstalling dependencies")
+    if not preview:
+        poetry.install()
 
 def clean_up() -> None:
     if git.is_working_directory_clean():
         return
 
-    typer.echo("Resetting working directory to a clean state")
-    git.stash()
-    git.pull()
-    git.pop()
+    if not preview:
+        info("Resetting working directory to a clean state")
+        git.stash()
+        git.pull()
+        git.pop()
 
 def verify_branch() -> None:
     current_branch = git.current_branch()
     release_branches = git.release_branches()
 
     if not current_branch in release_branches:
-        typer.echo(f"Current checked out branch {current_branch} is not a release branch {release_branches}")
-        raise typer.Exit(code=1)
+        fatal(f"Current checked out branch {current_branch} is not a release branch {release_branches}")
