@@ -29,4 +29,7 @@ def cli(version: str = typer.Argument(...)) -> None:
     typer.echo(f"Bumping current version {current_version} to {version}")
     project.bump_version(version)
 
+    typer.echo("Committing changes")
+    poetry.ok()
+
     typer.echo("OK")

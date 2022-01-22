@@ -17,3 +17,6 @@ def test_run_pytest(mock_shell: MagicMock):
 def test_run_unittest(mock_shell: MagicMock):
     mock_shell.return_value = ["Ran 1 test in 0.000s"]
     assert poetry.run_tests(command="python -m unittest")
+
+def test_verify_project_health():
+    assert poetry.ok()
