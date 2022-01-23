@@ -2,6 +2,10 @@
 requires = [ "poetry-core>=1.0.0",]
 build-backend = "poetry.core.masonry.api"
 
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+
 [tool.poetry]
 name = "publicator"
 version = "0.1.5"
@@ -19,6 +23,9 @@ colorama = "^0.4.4"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 pytest-mock = "^3.6.1"
+mypy = "^0.931"
+black = "^21.12b0"
+flake8 = "^4.0.1"
 
 [tool.poetry.scripts]
 publicator = "publicator.cli:app"

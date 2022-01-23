@@ -32,5 +32,8 @@ jobs:
     - name: Install dependencies
       run: poetry install
 
+    - name: Check formatting
+      run: poetry run black --check .
+
     - name: Run unit tests
       run: poetry run pytest --verbose
