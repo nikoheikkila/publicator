@@ -25,6 +25,6 @@ def publish(repository: Optional[str] = None, dry_run: bool = False) -> List[str
     if repository:
         command += f" --repository {repository}"
     if dry_run:
-        command += f" --dry-run"
+        command += " --dry-run"
 
     return shell.run(command)

@@ -47,7 +47,7 @@ def cli(
     if not skip_push:
         push()
 
-    success(f"Published the new package version. Cheers!")
+    success("Published the new package version. Cheers!")
 
 
 def info(message: str) -> None:
@@ -132,5 +132,5 @@ def verify_branch() -> None:
     current_branch = git.current_branch()
     release_branches = git.release_branches()
 
-    if not current_branch in release_branches:
+    if current_branch not in release_branches:
         fatal(f"Current checked out branch {current_branch} is not a release branch {release_branches}")

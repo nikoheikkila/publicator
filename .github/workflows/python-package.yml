@@ -35,5 +35,8 @@ jobs:
     - name: Check formatting
       run: poetry run black --check .
 
+    - name: Check code style
+      run: poetry run flake8 --show-source .
+
     - name: Run unit tests
       run: poetry run pytest --verbose
