@@ -1,0 +1,45 @@
+name: Application Test Suite
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9"]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Poetry
+      uses: abatilo/actions-poetry@v2.1.4
+      with:
+        poetry-version: 1.1
+
+    - name: Install dependencies
+      run: poetry install
+
+    - name: Check formatting
+      run: poetry run black --check .
+
+    - name: Check code style
+      run: poetry run flake8 --show-source .
+
+    - name: Check code typing
+      run: poetry run mypy --strict -p publicator
+
+    - name: Run unit tests
+      run: poetry run pytest --verbose

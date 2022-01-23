@@ -1,22 +1,25 @@
 from __future__ import annotations
 import re
 from dataclasses import dataclass
+from typing import Tuple
 
 # It ain't perfect but it's an honest day of work.
 SEMVER_REGEX = re.compile(r"^\d\.\d\.\d$", re.MULTILINE)
 
+
 class SemverException(Exception):
     pass
 
+
 @dataclass(frozen=True)
-class Semver():
+class Semver:
     major: int = 0
     minor: int = 1
     patch: int = 0
 
     @classmethod
     def from_string(self, version: str) -> Semver:
-        major, minor, patch = map(int, Semver.validate(version).split('.'))
+        major, minor, patch = map(int, Semver.validate(version).split("."))
         return Semver(major, minor, patch)
 
     @staticmethod
@@ -26,7 +29,7 @@ class Semver():
 
         return version
 
-    def as_tuple(self) -> tuple[int]:
+    def as_tuple(self) -> Tuple[int, int, int]:
         return (self.major, self.minor, self.patch)
 
     def __eq__(self, other: object) -> bool:

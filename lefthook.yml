@@ -1,0 +1,21 @@
+pre-push:
+  commands:
+    pytest:
+      run: poetry run pytest
+
+pre-commit:
+  parallel: true
+  commands:
+    black:
+      glob: "*.py"
+      run: poetry run black --check {staged_files}
+    flake8:
+      glob: "*.py"
+      run: poetry run flake8 {staged_files}
+    mypy:
+      run: poetry run mypy --strict -p publicator
+  scripts:
+    "hello.js":
+      runner: node
+    "any.go":
+      runner: go run

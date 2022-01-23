@@ -9,10 +9,13 @@ preview = os.environ.get("PUBLICATOR_PREVIEW")
 
 app = typer.Typer(name="publicator")
 
+
 @app.command()
 def cli(
     version: str = typer.Argument(..., metavar="version", help="can be one of (patch | minor | major | 1.2.3)"),
-    repository: Optional[str] = typer.Option(default=None, metavar="name", help="Custom repository for publishing (must be specified in pyproject.toml)"),
+    repository: Optional[str] = typer.Option(
+        default=None, metavar="name", help="Custom repository for publishing (must be specified in pyproject.toml)"
+    ),
     any_branch: bool = typer.Option(default=False, help="Allow publishing from any branch"),
     skip_cleaning: bool = typer.Option(default=False, help="Skip repository clean up"),
     yolo: bool = typer.Option(default=False, help="Skip reinstall and test steps"),
@@ -34,7 +37,7 @@ def cli(
     commit_changes(semver)
 
     if not skip_tag:
-        create_tag(version)
+        create_tag(semver)
 
     build_package()
 
@@ -44,37 +47,45 @@ def cli(
     if not skip_push:
         push()
 
-    success(f"Published the new package version. Cheers!")
+    success("Published the new package version. Cheers!")
+
 
 def info(message: str) -> None:
     typer.secho(f"📢 {message}", fg=typer.colors.BRIGHT_BLUE)
 
+
 def success(message: str) -> None:
     typer.secho(f"🎉 {message}", fg=typer.colors.BRIGHT_GREEN, bold=True)
+
 
 def fatal(message: str, exit_code: int = 1) -> None:
     typer.secho(f"❌ {message}", fg=typer.colors.BRIGHT_RED, bold=True)
     raise typer.Exit(code=exit_code)
 
-def push():
+
+def push() -> None:
     info("Pushing changes to Git")
     if not preview:
         git.push()
 
-def publish_package(repository: str, skip_publish: bool) -> None:
+
+def publish_package(repository: Optional[str], skip_publish: bool) -> None:
     info("Publishing the package to repository")
     if not preview:
         poetry.publish(repository, dry_run=skip_publish)
+
 
 def build_package() -> None:
     info("Building the package")
     if not preview:
         poetry.build()
 
+
 def create_tag(version: Semver) -> None:
     info(f"Creating a new tag {version} from HEAD")
     if not preview:
         git.create_tag(version, message=f"Version {version}")
+
 
 def commit_changes(semver: Semver) -> None:
     info("Committing changes")
@@ -82,6 +93,7 @@ def commit_changes(semver: Semver) -> None:
         poetry.ok()
         git.add()
         git.commit(f"release: {semver}")
+
 
 def bump_version(version: str) -> Semver:
     current_version = project.get_version()
@@ -92,15 +104,18 @@ def bump_version(version: str) -> Semver:
 
     return project.bump_version(version)
 
-def run_tests():
+
+def run_tests() -> None:
     info("Running tests")
     if not preview:
         poetry.run_tests()
 
-def install_dependencies():
+
+def install_dependencies() -> None:
     info("Reinstalling dependencies")
     if not preview:
         poetry.install()
+
 
 def clean_up() -> None:
     if git.is_working_directory_clean():
@@ -112,9 +127,10 @@ def clean_up() -> None:
         git.pull()
         git.pop()
 
+
 def verify_branch() -> None:
     current_branch = git.current_branch()
     release_branches = git.release_branches()
 
-    if not current_branch in release_branches:
+    if current_branch not in release_branches:
         fatal(f"Current checked out branch {current_branch} is not a release branch {release_branches}")
