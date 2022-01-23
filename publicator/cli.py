@@ -37,7 +37,7 @@ def cli(
     commit_changes(semver)
 
     if not skip_tag:
-        create_tag(version)
+        create_tag(semver)
 
     build_package()
 
@@ -63,13 +63,13 @@ def fatal(message: str, exit_code: int = 1) -> None:
     raise typer.Exit(code=exit_code)
 
 
-def push():
+def push() -> None:
     info("Pushing changes to Git")
     if not preview:
         git.push()
 
 
-def publish_package(repository: str, skip_publish: bool) -> None:
+def publish_package(repository: Optional[str], skip_publish: bool) -> None:
     info("Publishing the package to repository")
     if not preview:
         poetry.publish(repository, dry_run=skip_publish)
@@ -105,13 +105,13 @@ def bump_version(version: str) -> Semver:
     return project.bump_version(version)
 
 
-def run_tests():
+def run_tests() -> None:
     info("Running tests")
     if not preview:
         poetry.run_tests()
 
 
-def install_dependencies():
+def install_dependencies() -> None:
     info("Reinstalling dependencies")
     if not preview:
         poetry.install()

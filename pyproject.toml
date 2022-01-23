@@ -6,6 +6,9 @@ build-backend = "poetry.core.masonry.api"
 line-length = 120
 include = '\.pyi?$'
 
+[tool.mypy]
+ignore_missing_imports = true
+
 [tool.poetry]
 name = "publicator"
 version = "0.1.5"
@@ -26,6 +29,7 @@ pytest-mock = "^3.6.1"
 mypy = "^0.931"
 black = "^21.12b0"
 flake8 = "^4.0.1"
+types-toml = "^0.10.3"
 
 [tool.poetry.scripts]
 publicator = "publicator.cli:app"

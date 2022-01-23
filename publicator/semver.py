@@ -29,7 +29,7 @@ class Semver:
 
         return version
 
-    def as_tuple(self) -> Tuple[int]:
+    def as_tuple(self) -> Tuple[int, int, int]:
         return (self.major, self.minor, self.patch)
 
     def __eq__(self, other: object) -> bool:

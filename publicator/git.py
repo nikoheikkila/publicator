@@ -2,6 +2,7 @@
 from typing import List, Tuple
 
 from publicator import shell
+from publicator.semver import Semver
 
 
 def current_branch() -> str:
@@ -40,8 +41,8 @@ def commit(message: str) -> List[str]:
     return shell.run(f'git commit -m "{message.strip()}"')
 
 
-def create_tag(version: str, message: str) -> List[str]:
-    return shell.run(f'git tag -a {version.strip()} -m "{message.strip()}"')
+def create_tag(version: Semver, message: str) -> List[str]:
+    return shell.run(f'git tag -a {version} -m "{message.strip()}"')
 
 
 def push() -> List[str]:

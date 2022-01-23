@@ -38,5 +38,8 @@ jobs:
     - name: Check code style
       run: poetry run flake8 --show-source .
 
+    - name: Check code typing
+      run: poetry run mypy --strict -p publicator
+
     - name: Run unit tests
       run: poetry run pytest --verbose
