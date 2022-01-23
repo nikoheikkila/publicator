@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict
 import toml
 from pathlib import Path
 from mergedeep import merge
@@ -28,6 +28,6 @@ def bump_version(version: str, filename: str = "pyproject.toml") -> Semver:
 
     return Semver.from_string(version)
 
-def read_project_data(filename: str = "pyproject.toml") -> dict[str, Any]:
+def read_project_data(filename: str = "pyproject.toml") -> Dict[str, Any]:
     pyproject = Path.cwd() / filename
     return toml.loads(pyproject.read_text())
