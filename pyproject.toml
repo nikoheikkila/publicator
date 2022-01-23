@@ -11,7 +11,7 @@ ignore_missing_imports = true
 
 [tool.poetry]
 name = "publicator"
-version = "0.2.0"
+version = "0.2.1"
 description = ""
 authors = [ "Niko Heikkilä <niko.heikkila@futurice.com>",]
 readme = "README.md"
