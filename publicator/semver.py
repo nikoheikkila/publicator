@@ -1,6 +1,12 @@
 from __future__ import annotations
+import re
 from dataclasses import dataclass
-from unittest.mock import patch
+
+# It ain't perfect but it's an honest day of work.
+SEMVER_REGEX = re.compile(r"^\d\.\d\.\d$", re.MULTILINE)
+
+class SemverException(Exception):
+    pass
 
 @dataclass(frozen=True)
 class Semver():
@@ -10,8 +16,15 @@ class Semver():
 
     @classmethod
     def from_string(self, version: str) -> Semver:
-        major, minor, patch = map(int, version.split('.'))
+        major, minor, patch = map(int, Semver.validate(version).split('.'))
         return Semver(major, minor, patch)
+
+    @staticmethod
+    def validate(version: str) -> str:
+        if not SEMVER_REGEX.match(version):
+            raise SemverException(f"Version string {version} is not a valid semantic version")
+
+        return version
 
     def as_tuple(self) -> tuple[int]:
         return (self.major, self.minor, self.patch)

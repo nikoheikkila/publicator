@@ -10,13 +10,6 @@ def mock_shell(mocker: MockerFixture) -> MagicMock:
     return mocker.patch.object(shell, 'run', autospec=True)
 
 @fixture()
-def mock_toml(mocker: MockerFixture) -> tuple[MagicMock]:
-    return (
-        mocker.patch.object(toml, 'loads', autospec=True),
-        mocker.patch.object(toml, 'dumps', autospec=True),
-    )
-
-@fixture()
 def mock_path(mocker: MockerFixture) -> tuple[MagicMock]:
     return (
         mocker.path.object(Path, 'read_text', autospec=True),

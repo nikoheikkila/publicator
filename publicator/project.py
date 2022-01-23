@@ -6,16 +6,15 @@ from mergedeep import merge
 from publicator.semver import Semver
 
 def get_version() -> Semver:
-    pyproject = Path.cwd() / "pyproject.toml"
-    contents: dict[str, Any] = toml.loads(pyproject.read_text())
-    version = contents['tool']['poetry']['version']
+    project = read_project_data()
+    version = project['tool']['poetry']['version']
 
     return Semver.from_string(version)
 
-def bump_version(version: str) -> Semver:
-    pyproject = Path.cwd() / "pyproject.toml"
+def bump_version(version: str, filename: str = "pyproject.toml") -> Semver:
+    path = Path.cwd() / filename
+    project = read_project_data(path.name)
 
-    contents: dict[str, Any] = toml.loads(pyproject.read_text())
     bump = {
         "tool": {
             "poetry": {
@@ -24,8 +23,11 @@ def bump_version(version: str) -> Semver:
         }
     }
 
-    new_contents = merge({}, contents, bump)
-
-    pyproject.write_text(toml.dumps(new_contents))
+    new_contents = toml.dumps(merge({}, project, bump))
+    path.write_text(new_contents)
 
     return Semver.from_string(version)
+
+def read_project_data(filename: str = "pyproject.toml") -> dict[str, Any]:
+    pyproject = Path.cwd() / filename
+    return toml.loads(pyproject.read_text())
