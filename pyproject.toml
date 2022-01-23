@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "publicator"
-version = "0.1.4"
+version = "0.1.5"
 description = ""
 authors = [ "Niko Heikkilä <niko.heikkila@futurice.com>",]
 readme = "README.md"
