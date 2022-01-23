@@ -1,12 +1,12 @@
 """Git operations"""
-from typing import List
+from typing import List, Tuple
 
 from publicator import shell
 
 def current_branch() -> str:
     return shell.run("git symbolic-ref --short HEAD").pop()
 
-def release_branches() -> tuple[str, str]:
+def release_branches() -> Tuple[str, str]:
     return ("main", "master")
 
 def status() -> List[str]:

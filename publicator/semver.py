@@ -1,6 +1,7 @@
 from __future__ import annotations
 import re
 from dataclasses import dataclass
+from typing import Tuple
 
 # It ain't perfect but it's an honest day of work.
 SEMVER_REGEX = re.compile(r"^\d\.\d\.\d$", re.MULTILINE)
@@ -26,7 +27,7 @@ class Semver():
 
         return version
 
-    def as_tuple(self) -> tuple[int]:
+    def as_tuple(self) -> Tuple[int]:
         return (self.major, self.minor, self.patch)
 
     def __eq__(self, other: object) -> bool:
