@@ -4,14 +4,14 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 120
-include = '\.pyi?$'
+include = "\\.pyi?$"
 
 [tool.mypy]
 ignore_missing_imports = true
 
 [tool.poetry]
 name = "publicator"
-version = "0.1.5"
+version = "0.2.0"
 description = ""
 authors = [ "Niko Heikkilä <niko.heikkila@futurice.com>",]
 readme = "README.md"
