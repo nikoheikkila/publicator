@@ -18,8 +18,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.8"
-toml = "^0.10.2"
-mergedeep = "^1.3.4"
 typer = "^0.4.0"
 colorama = "^0.4.4"
 
@@ -29,7 +27,6 @@ pytest-mock = "^3.6.1"
 mypy = "^0.931"
 black = "^21.12b0"
 flake8 = "^4.0.1"
-types-toml = "^0.10.3"
 
 [tool.poetry.scripts]
 publicator = "publicator.cli:app"

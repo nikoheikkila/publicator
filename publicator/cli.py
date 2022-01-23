@@ -2,7 +2,7 @@ import os
 from typing import Optional
 import typer
 
-from publicator import git, poetry, project
+from publicator import git, poetry
 from publicator.semver import Semver
 
 preview = os.environ.get("PUBLICATOR_PREVIEW")
@@ -12,7 +12,11 @@ app = typer.Typer(name="publicator")
 
 @app.command()
 def cli(
-    version: str = typer.Argument(..., metavar="version", help="can be one of (patch | minor | major | 1.2.3)"),
+    version: str = typer.Argument(
+        ...,
+        metavar="version",
+        help="can be a valid semver or one of: patch, minor, major, prepatch, preminor, premajor, prerelease",
+    ),
     repository: Optional[str] = typer.Option(
         default=None, metavar="name", help="Custom repository for publishing (must be specified in pyproject.toml)"
     ),
@@ -33,11 +37,11 @@ def cli(
         install_dependencies()
         run_tests()
 
-    semver = bump_version(version)
-    commit_changes(semver)
+    new_version = bump_version(version)
+    commit_changes(new_version)
 
     if not skip_tag:
-        create_tag(semver)
+        create_tag(new_version)
 
     build_package()
 
@@ -96,13 +100,15 @@ def commit_changes(semver: Semver) -> None:
 
 
 def bump_version(version: str) -> Semver:
-    current_version = project.get_version()
-    info(f"Bumping current version from {current_version} to {version}")
+    current_version = poetry.version()
 
     if preview:
         return current_version
 
-    return project.bump_version(version)
+    next_version = poetry.bump(version)
+    info(f"Bumped version from {current_version} to {next_version}")
+
+    return next_version
 
 
 def run_tests() -> None:
