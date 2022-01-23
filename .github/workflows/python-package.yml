@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  PIP_CACHE_DIR: $HOME/.pip
-  POETRY_CACHE_DIR: $HOME/.poetry
-
 jobs:
   build:
 
@@ -28,10 +24,13 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
+    - name: Install Poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.1
+
     - name: Install dependencies
-      run: |
-        python -m pip install poetry
-        poetry install
+      run: poetry install
 
     - name: Run unit tests
       run: poetry run pytest --verbose
