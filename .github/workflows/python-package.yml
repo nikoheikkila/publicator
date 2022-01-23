@@ -33,8 +33,5 @@ jobs:
         python -m pip install poetry
         poetry install
 
-    - name: Print documentation
-      run: poetry run publicator --help
-
     - name: Run unit tests
       run: poetry run pytest --verbose
