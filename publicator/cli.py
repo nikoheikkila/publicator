@@ -21,35 +21,33 @@ def cli(
         default=None, metavar="name", help="Custom repository for publishing (must be specified in pyproject.toml)"
     ),
     any_branch: bool = typer.Option(default=False, help="Allow publishing from any branch"),
-    skip_cleaning: bool = typer.Option(default=False, help="Skip repository clean up"),
-    yolo: bool = typer.Option(default=False, help="Skip reinstall and test steps"),
-    skip_tag: bool = typer.Option(default=False, help="Skip creating a new tag"),
-    skip_publish: bool = typer.Option(default=False, help="Skip publishing the package to the registry"),
-    skip_push: bool = typer.Option(default=False, help="Skip pushing commits and tags to Git"),
+    clean: bool = typer.Option(default=True, help="Ensure you're working with the latest changes"),
+    tag: bool = typer.Option(default=True, help="Create a new tag for Git"),
+    publish: bool = typer.Option(default=True, help="Publish the package to the registry"),
+    push: bool = typer.Option(default=True, help="Push commits and tags to Git"),
 ) -> None:
     if not any_branch:
         verify_branch()
 
-    if not skip_cleaning:
+    if clean:
         clean_up()
-
-    if not yolo:
         install_dependencies()
-        run_tests()
+
+    run_tests()
 
     new_version = bump_version(version)
     commit_changes(new_version)
 
-    if not skip_tag:
+    if tag:
         create_tag(new_version)
 
     build_package()
 
-    if not skip_publish:
-        publish_package(repository, skip_publish)
+    if publish:
+        publish_package(repository)
 
-    if not skip_push:
-        push()
+    if push:
+        push_changes()
 
     success("Published the new package version. Cheers!")
 
@@ -67,16 +65,16 @@ def fatal(message: str, exit_code: int = 1) -> None:
     raise typer.Exit(code=exit_code)
 
 
-def push() -> None:
+def push_changes() -> None:
     info("Pushing changes to Git")
     if not preview:
         git.push()
 
 
-def publish_package(repository: Optional[str], skip_publish: bool) -> None:
+def publish_package(repository: Optional[str]) -> None:
     info("Publishing the package to repository")
     if not preview:
-        poetry.publish(repository, dry_run=skip_publish)
+        poetry.publish(repository)
 
 
 def build_package() -> None:

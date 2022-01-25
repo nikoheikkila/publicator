@@ -40,25 +40,21 @@ pipx install publicator
 Usage: publicator [OPTIONS] version
 
 Arguments:
-  version  can be one of (patch | minor | major | 1.2.3)  [required]
+  version  can be a valid semver or one of: patch, minor, major, prepatch,
+           preminor, premajor, prerelease  [required]
 
 Options:
   --repository name               Custom repository for publishing (must be
                                   specified in pyproject.toml)
   --any-branch / --no-any-branch  Allow publishing from any branch  [default:
                                   no-any-branch]
-  --skip-cleaning / --no-skip-cleaning
-                                  Skip repository clean up  [default: no-skip-
-                                  cleaning]
-  --yolo / --no-yolo              Skip reinstall and test steps  [default: no-
-                                  yolo]
-  --skip-tag / --no-skip-tag      Skip creating a new tag  [default: no-skip-
-                                  tag]
-  --skip-publish / --no-skip-publish
-                                  Skip publishing the package to the registry
-                                  [default: no-skip-publish]
-  --skip-push / --no-skip-push    Skip pushing commits and tags to Git
-                                  [default: no-skip-push]
+  --clean / --no-clean            Ensure you're working with the latest
+                                  changes  [default: clean]
+  --tag / --no-tag                Create a new tag for Git  [default: tag]
+  --publish / --no-publish        Publish the package to the registry
+                                  [default: publish]
+  --push / --no-push              Push commits and tags to Git  [default:
+                                  push]
   --install-completion [bash|zsh|fish|powershell|pwsh]
                                   Install completion for the specified shell.
   --show-completion [bash|zsh|fish|powershell|pwsh]

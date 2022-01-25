@@ -35,7 +35,7 @@ def test_building_package(mock_shell: MagicMock):
 
 def test_publishing_the_package(mock_shell: MagicMock):
     mock_shell.return_value = ["Publishing publicator (1.2.3)"]
-    assert poetry.publish(repository=None, dry_run=True)
+    assert poetry.publish(repository=None)
 
 
 def test_version_is_returned(mock_shell: MagicMock):

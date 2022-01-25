@@ -20,13 +20,11 @@ def build() -> List[str]:
     return shell.run("poetry build")
 
 
-def publish(repository: Optional[str] = None, dry_run: bool = False) -> List[str]:
+def publish(repository: Optional[str] = None) -> List[str]:
     command = "poetry publish"
 
     if repository:
         command += f" --repository {repository}"
-    if dry_run:
-        command += " --dry-run"
 
     return shell.run(command)
 
