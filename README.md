@@ -69,6 +69,9 @@ Options:
                                   [default: publish]
   --push / --no-push              Push commits and tags to Git  [default:
                                   push]
+  --test-script TEXT              Name of the test script to run under the
+                                  current virtual environment  [default:
+                                  pytest]
   --install-completion [bash|zsh|fish|powershell|pwsh]
                                   Install completion for the specified shell.
   --show-completion [bash|zsh|fish|powershell|pwsh]

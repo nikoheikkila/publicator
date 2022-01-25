@@ -7,7 +7,7 @@ def install() -> List[str]:
     return shell.run("poetry install --remove-untracked")
 
 
-def run_tests(command: str = "pytest") -> List[str]:
+def run(command: str) -> List[str]:
     return shell.run(f"poetry run {command.strip()}")
 
 

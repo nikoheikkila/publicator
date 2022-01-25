@@ -25,6 +25,9 @@ def cli(
     tag: bool = typer.Option(default=True, help="Create a new tag for Git"),
     publish: bool = typer.Option(default=True, help="Publish the package to the registry"),
     push: bool = typer.Option(default=True, help="Push commits and tags to Git"),
+    test_script: str = typer.Option(
+        default="pytest", help="Name of the test script to run under the current virtual environment"
+    ),
 ) -> None:
     if not any_branch:
         verify_branch()
@@ -33,7 +36,7 @@ def cli(
         clean_up()
         install_dependencies()
 
-    run_tests()
+    run_tests(test_script)
 
     new_version = bump_version(version)
     commit_changes(new_version)
@@ -109,10 +112,10 @@ def bump_version(version: str) -> Semver:
     return next_version
 
 
-def run_tests() -> None:
-    info("Running tests")
+def run_tests(script: str) -> None:
+    info(f"Running tests with '{script}'")
     if not preview:
-        poetry.run_tests()
+        poetry.run(script)
 
 
 def install_dependencies() -> None:
