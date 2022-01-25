@@ -2,6 +2,10 @@
 
 > A better `poetry publish` experience.
 
+While [Poetry](https://python-poetry.org) finally brings us a sane solution for publishing and maintaining Python packages, many developers crave for a more _enhanced_ and safer user experience. Publicator aims to offer a convenient tool for everyday work.
+
+Licensed under [**MIT**](LICENSE.md).
+
 ## Features
 
 ### Supported
@@ -28,15 +32,25 @@
 
 ## Install
 
-Install with pipx.
+Install or run directly using `pipx`, which manages an isolated virtual environment for you.
 
 ```sh
 pipx install publicator
+pipx run publicator <version>
+```
+
+Alternatively, add it as dependency to your Poetry project.
+
+```sh
+poetry add --dev publicator
+poetry run publicator <version>
 ```
 
 ## Usage
 
-```plain
+```sh
+$ publicator --help
+
 Usage: publicator [OPTIONS] version
 
 Arguments:
@@ -48,7 +62,7 @@ Options:
                                   specified in pyproject.toml)
   --any-branch / --no-any-branch  Allow publishing from any branch  [default:
                                   no-any-branch]
-  --clean / --no-clean            Ensure you're working with the latest
+  --clean / --no-clean            Ensure you are working with the latest
                                   changes  [default: clean]
   --tag / --no-tag                Create a new tag for Git  [default: tag]
   --publish / --no-publish        Publish the package to the registry
@@ -61,6 +75,24 @@ Options:
                                   Show completion for the specified shell, to
                                   copy it or customize the installation.
   --help                          Show this message and exit.
+```
+
+### Configuration
+
+Flags described above enable more granular usage. For example, in CI/CD pipelines you might want to disable publishing the package to registry or disable creating Git tags depending on your use case.
+
+If you'd rather skip on everything and check what would be executed (_dry run_), you can activate a preview mode via environment variable like so:
+
+```sh
+PUBLICATOR_PREVIEW=true publicator <version>
+```
+
+### Shell Completion
+
+Publicator stands on the shoulders of [Typer](https://typer.tiangolo.com), which is a robust CLI library for Python. You can generate <kbd>TAB</kbd> completions for common shells such as Bash, ZSH, Fish, and Powershell.
+
+```sh
+publicator --install-completion <shell>
 ```
 
 ## Contributing
