@@ -28,6 +28,9 @@ def cli(
     test_script: str = typer.Option(
         default="pytest", help="Name of the test script to run under the current virtual environment"
     ),
+    template: str = typer.Option(
+        default="release: %s", help="Commit message template (`%s` will be replaced with the new version tag)"
+    ),
 ) -> None:
     if not any_branch:
         verify_branch()
@@ -39,7 +42,7 @@ def cli(
     run_tests(test_script)
 
     new_version = bump_version(version)
-    commit_changes(new_version)
+    commit_changes(new_version, template)
 
     if tag:
         create_tag(new_version)
@@ -92,12 +95,14 @@ def create_tag(version: Semver) -> None:
         git.create_tag(version, message=f"Version {version}")
 
 
-def commit_changes(semver: Semver) -> None:
-    info("Committing changes")
+def commit_changes(semver: Semver, template: str) -> None:
+    message = template % (semver)
+    info(f'Committing changes with message: "{message}"')
+
     if not preview:
         poetry.ok()
         git.add()
-        git.commit(f"release: {semver}")
+        git.commit(message)
 
 
 def bump_version(version: str) -> Semver:

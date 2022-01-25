@@ -72,6 +72,9 @@ Options:
   --test-script TEXT              Name of the test script to run under the
                                   current virtual environment  [default:
                                   pytest]
+  --template TEXT                 Commit message template (`%s` will be
+                                  replaced with the new version tag)
+                                  [default: release: %s]
   --install-completion [bash|zsh|fish|powershell|pwsh]
                                   Install completion for the specified shell.
   --show-completion [bash|zsh|fish|powershell|pwsh]
