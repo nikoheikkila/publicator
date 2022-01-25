@@ -1,20 +1,14 @@
-[build-system]
-requires = [ "poetry-core>=1.0.0",]
-build-backend = "poetry.core.masonry.api"
-
-[tool.black]
-line-length = 120
-include = "\\.pyi?$"
-
-[tool.mypy]
-ignore_missing_imports = true
-
 [tool.poetry]
 name = "publicator"
 version = "0.3.0"
-description = ""
+description = "A better poetry publish experience."
+license = "MIT"
 authors = [ "Niko Heikkilä <niko.heikkila@futurice.com>",]
 readme = "README.md"
+homepage = "https://pypi.org/project/publicator/"
+repository = "https://github.com/nikoheikkila/publicator"
+documentation = "https://github.com/nikoheikkila/publicator/blob/main/README.md"
+keywords = [ "poetry", "tools", "packaging" ]
 
 [tool.poetry.dependencies]
 python = ">=3.8"
@@ -30,3 +24,18 @@ flake8 = "^4.0.1"
 
 [tool.poetry.scripts]
 publicator = "publicator.cli:app"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/nikoheikkila/publicator/issues"
+"Discussions" = "https://github.com/nikoheikkila/publicator/discussions"
+
+[tool.black]
+line-length = 120
+include = "\\.pyi?$"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[build-system]
+requires = [ "poetry-core>=1.0.0",]
+build-backend = "poetry.core.masonry.api"
