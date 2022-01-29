@@ -3,8 +3,14 @@ import re
 from dataclasses import dataclass
 from typing import Tuple
 
-# It ain't perfect but it's an honest day of work.
-SEMVER_REGEX = re.compile(r"^\d\.\d\.\d$", re.MULTILINE)
+# See: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+SEMVER_REGEX = re.compile(
+    r"^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)"
+    r"(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)"
+    r"(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))"
+    r"?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$",
+    re.MULTILINE,
+)
 
 
 class SemverException(Exception):
@@ -16,30 +22,40 @@ class Semver:
     major: int = 0
     minor: int = 1
     patch: int = 0
+    pre_release: str = ""
+    build: str = ""
 
     @classmethod
     def from_string(self, version: str) -> Semver:
-        major, minor, patch = map(int, Semver.validate(version).split("."))
-        return Semver(major, minor, patch)
+        major, minor, patch, pre_release, build = Semver.parse(version)
+        return Semver(int(major), int(minor), int(patch), pre_release, build)
 
     @staticmethod
-    def validate(version: str) -> str:
-        if not SEMVER_REGEX.match(version):
+    def parse(version: str) -> Tuple[str, str, str, str, str]:
+        if not SEMVER_REGEX.fullmatch(version):
             raise SemverException(f"Version string {version} is not a valid semantic version")
 
-        return version
+        result: Tuple[str, str, str, str, str] = SEMVER_REGEX.findall(version).pop()
+        return result
 
     def as_tuple(self) -> Tuple[int, int, int]:
         return (self.major, self.minor, self.patch)
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Semver):
-            return self.as_tuple() == other.as_tuple()
+            return str(self) == str(other)
 
         return False
 
     def __str__(self) -> str:
-        return f"{self.major}.{self.minor}.{self.patch}"
+        result = f"{self.major}.{self.minor}.{self.patch}"
+
+        if self.pre_release:
+            result += f"-{self.pre_release}"
+        if self.build:
+            result += f"+{self.build}"
+
+        return result
 
     def __repr__(self) -> str:
         return f"Version ({self})"
