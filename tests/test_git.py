@@ -57,3 +57,21 @@ def test_creating_tag(mock_shell: MagicMock) -> None:
 def test_pushing_changes(mock_shell: MagicMock) -> None:
     mock_shell.return_value = ["Everything up-to-date"]
     assert git.push()
+
+
+def test_extract_repo_from_remote(mock_shell: MagicMock) -> None:
+    mock_shell.return_value = ["git@github.com:nikoheikkila/publicator.git"]
+
+    repo = git.Repo.from_remote()
+
+    assert repo.server == "github.com"
+    assert repo.owner == "nikoheikkila"
+    assert repo.name == "publicator"
+
+
+def test_extract_repo_from_invalid_remote(mock_shell: MagicMock) -> None:
+    mock_shell.return_value = ["no remote"]
+
+    repo = git.Repo.from_remote()
+
+    assert repo == git.Repo()

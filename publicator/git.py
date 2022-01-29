@@ -1,8 +1,43 @@
 """Git operations"""
-from typing import List, Tuple
+from __future__ import annotations
+from dataclasses import dataclass
+from typing import List, Mapping, Tuple
+
+from parse import compile, Parser, Result
 
 from publicator import shell
 from publicator.semver import Semver
+
+
+class RemoteParser:
+    parser: Parser
+
+    def __init__(self) -> None:
+        self.parser = compile("git@{server}:{owner}/{name}.git")
+
+    def parse(self, remote: str) -> Mapping[str, str]:
+        result = self.parser.parse(remote)
+
+        if not isinstance(result, Result):
+            return {}
+
+        named: Mapping[str, str] = result.named
+        return named
+
+
+@dataclass(frozen=True)
+class Repo:
+    server: str = ""
+    owner: str = ""
+    name: str = ""
+
+    @classmethod
+    def from_remote(self) -> Repo:
+        parser = RemoteParser()
+        remote = shell.run("git remote get-url --push origin").pop()
+        values = parser.parse(remote)
+
+        return self(server=values.get("server", ""), owner=values.get("owner", ""), name=values.get("name", ""))
 
 
 def current_branch() -> str:
