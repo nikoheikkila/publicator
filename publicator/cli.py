@@ -2,7 +2,7 @@ import os
 from typing import Optional
 import typer
 
-from publicator import git, poetry
+from publicator import git, github, poetry
 from publicator.semver import Semver
 
 preview = os.environ.get("PUBLICATOR_PREVIEW")
@@ -31,6 +31,10 @@ def cli(
     template: str = typer.Option(
         default="release: %s", help="Commit message template (`%s` will be replaced with the new version tag)"
     ),
+    release_draft: bool = typer.Option(
+        default=True,
+        help="Opens a pre-filled GitHub release page with browser if the current project is hosted on GitHub",
+    ),
 ) -> None:
     if not any_branch:
         verify_branch()
@@ -55,6 +59,9 @@ def cli(
     if push:
         push_changes()
 
+    if release_draft:
+        draft_new_release(new_version)
+
     success("Published the new package version. Cheers!")
 
 
@@ -69,6 +76,21 @@ def success(message: str) -> None:
 def fatal(message: str, exit_code: int = 1) -> None:
     typer.secho(f"❌ {message}", fg=typer.colors.BRIGHT_RED, bold=True)
     raise typer.Exit(code=exit_code)
+
+
+def draft_new_release(tag: Semver) -> None:
+    repo = git.Repo.from_remote()
+
+    info("Opening GitHub release draft in browser")
+
+    if preview:
+        return
+
+    try:
+        url = github.new_release_url(repo, tag, title=f"Version {tag}", body="Write here")
+        typer.launch(url)
+    except github.ReleaseException as error:
+        fatal(f"Skipping release draft. Reason: {error}")
 
 
 def push_changes() -> None:
