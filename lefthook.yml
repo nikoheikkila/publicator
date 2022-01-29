@@ -14,8 +14,3 @@ pre-commit:
       run: poetry run flake8 {staged_files}
     mypy:
       run: poetry run mypy --strict -p publicator
-  scripts:
-    "hello.js":
-      runner: node
-    "any.go":
-      runner: go run
