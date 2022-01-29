@@ -48,7 +48,7 @@ poetry run publicator <version>
 
 ## Usage
 
-```sh
+```plain
 $ publicator --help
 
 Usage: publicator [OPTIONS] version
@@ -62,7 +62,7 @@ Options:
                                   specified in pyproject.toml)
   --any-branch / --no-any-branch  Allow publishing from any branch  [default:
                                   no-any-branch]
-  --clean / --no-clean            Ensure you are working with the latest
+  --clean / --no-clean            Ensure you're working with the latest
                                   changes  [default: clean]
   --tag / --no-tag                Create a new tag for Git  [default: tag]
   --publish / --no-publish        Publish the package to the registry
@@ -75,6 +75,10 @@ Options:
   --template TEXT                 Commit message template (`%s` will be
                                   replaced with the new version tag)
                                   [default: release: %s]
+  --release-draft / --no-release-draft
+                                  Opens a pre-filled GitHub release page with
+                                  browser if the current project is hosted on
+                                  GitHub  [default: release-draft]
   --install-completion [bash|zsh|fish|powershell|pwsh]
                                   Install completion for the specified shell.
   --show-completion [bash|zsh|fish|powershell|pwsh]
