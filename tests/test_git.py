@@ -75,3 +75,13 @@ def test_extract_repo_from_invalid_remote(mock_shell: MagicMock) -> None:
     repo = git.Repo.from_remote()
 
     assert repo == git.Repo()
+
+
+def test_repo_is_from_github() -> None:
+    repo = git.Repo(server="github.com")
+    assert repo.is_github
+
+
+def test_repo_is_not_from_github() -> None:
+    repo = git.Repo(server="gitlab.com")
+    assert not repo.is_github

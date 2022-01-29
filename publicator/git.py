@@ -39,6 +39,10 @@ class Repo:
 
         return self(server=values.get("server", ""), owner=values.get("owner", ""), name=values.get("name", ""))
 
+    @property
+    def is_github(self) -> bool:
+        return "github.com" in self.server
+
 
 def current_branch() -> str:
     return shell.run("git symbolic-ref --short HEAD").pop()

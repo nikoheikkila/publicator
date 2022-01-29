@@ -1,4 +1,4 @@
-from pytest import fixture
+from pytest import fixture, raises
 from publicator import github
 from publicator.semver import Semver
 from publicator.git import Repo
@@ -36,3 +36,13 @@ def test_new_release_url_with_all_variables(repo: Repo, tag: Semver) -> None:
     )
 
     assert url == expected
+
+
+def test_new_release_url_throws_for_non_github_repos(tag: Semver) -> None:
+    repo = Repo(server="bitbucket.org", owner="user", name="stuff")
+
+    with raises(github.ReleaseException, match="Current repository is not hosted on github.com"):
+        github.new_release_url(
+            repo,
+            tag,
+        )
