@@ -73,6 +73,10 @@ def success(message: str) -> None:
     typer.secho(f"🎉 {message}", fg=typer.colors.BRIGHT_GREEN, bold=True)
 
 
+def warn(message: str) -> None:
+    typer.secho(f"⚠️ {message}", fg=typer.colors.BRIGHT_YELLOW)
+
+
 def fatal(message: str, exit_code: int = 1) -> None:
     typer.secho(f"❌ {message}", fg=typer.colors.BRIGHT_RED, bold=True)
     raise typer.Exit(code=exit_code)
@@ -90,7 +94,7 @@ def draft_new_release(tag: Semver) -> None:
         url = github.new_release_url(repo, tag, title=f"Version {tag}", body="Write here")
         typer.launch(url)
     except github.ReleaseException as error:
-        fatal(f"Skipping release draft. Reason: {error}")
+        warn(f"Skipping release draft. Reason: {error}")
 
 
 def push_changes() -> None:
