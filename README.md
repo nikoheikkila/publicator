@@ -62,6 +62,21 @@ poetry run publicator <version>
 
 ## Usage
 
+Publicator takes one command-line argument indicating the suitable version bump. It follows semantic versioning rules accurately.
+
+```sh
+# Release a new patch version (e.g. 1.0.0 -> 1.0.1)
+publicator patch
+
+# Release a new minor version (e.g. 1.0.1 -> 1.1.0)
+publicator minor
+
+# Release a new major version (e.g. 1.1.0 -> 2.0.0)
+publicator major
+```
+
+Run `publicator --help` to see the full list of supported options:
+
 ```plain
 $ publicator --help
 
