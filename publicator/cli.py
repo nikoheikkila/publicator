@@ -2,11 +2,11 @@ import os
 from typing import Optional
 import typer
 
-from publicator import git, github, poetry
+from publicator import git, github, poetry, config
 from publicator.semver import Semver
 
 preview = os.environ.get("PUBLICATOR_PREVIEW")
-
+configuration = config.factory()
 app = typer.Typer(name="publicator")
 
 
@@ -18,21 +18,31 @@ def cli(
         help="can be a valid semver or one of: patch, minor, major, prepatch, preminor, premajor, prerelease",
     ),
     repository: Optional[str] = typer.Option(
-        default=None, metavar="name", help="Custom repository for publishing (must be specified in pyproject.toml)"
+        default=configuration.get("repository"),
+        metavar="name",
+        help="Custom repository for publishing (must be specified in pyproject.toml)",
     ),
-    any_branch: bool = typer.Option(default=False, help="Allow publishing from any branch"),
-    clean: bool = typer.Option(default=True, help="Ensure you're working with the latest changes"),
-    tag: bool = typer.Option(default=True, help="Create a new tag for Git"),
-    publish: bool = typer.Option(default=True, help="Publish the package to the registry"),
-    push: bool = typer.Option(default=True, help="Push commits and tags to Git"),
+    any_branch: bool = typer.Option(
+        default=configuration.get("any-branch", False), help="Allow publishing from any branch"
+    ),
+    clean: bool = typer.Option(
+        default=configuration.get("clean", True), help="Ensure you're working with the latest changes"
+    ),
+    tag: bool = typer.Option(default=configuration.get("tag", True), help="Create a new tag for Git"),
+    publish: bool = typer.Option(
+        default=configuration.get("publish", True), help="Publish the package to the registry"
+    ),
+    push: bool = typer.Option(default=configuration.get("push", True), help="Push commits and tags to Git"),
     test_script: str = typer.Option(
-        default="pytest", help="Name of the test script to run under the current virtual environment"
+        default=configuration.get("test-script", "pytest"),
+        help="Name of the test script to run under the current virtual environment",
     ),
     template: str = typer.Option(
-        default="release: %s", help="Commit message template (`%s` will be replaced with the new version tag)"
+        default=configuration.get("template", "release: %s"),
+        help="Commit message template (`%s` will be replaced with the new version tag)",
     ),
     release_draft: bool = typer.Option(
-        default=True,
+        default=configuration.get("release-draft", True),
         help="Opens a pre-filled GitHub release page with browser if the current project is hosted on GitHub",
     ),
 ) -> None:

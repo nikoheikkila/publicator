@@ -1,10 +1,12 @@
 from __future__ import annotations
 from abc import ABCMeta, abstractclassmethod, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Dict, Union
 import tomli
 
-Data = Dict[str, Any]
+TOMLKey = str
+TOMLValue = Union[str, int, float, bool, None]
+Data = Dict[TOMLKey, TOMLValue]
 
 
 class Configurable(metaclass=ABCMeta):
@@ -15,7 +17,7 @@ class Configurable(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def get(self, key: str, fallback: Optional[str] = None) -> Optional[str]:
+    def get(self, key: str, fallback: TOMLValue = None) -> TOMLValue:
         raise NotImplementedError
 
 
@@ -34,7 +36,7 @@ class Configuration(Configurable):
 
         return NullConfiguration()
 
-    def get(self, key: str, fallback: Optional[str] = None) -> Optional[str]:
+    def get(self, key: str, fallback: TOMLValue = None) -> TOMLValue:
         return self.values.get(key, fallback)
 
 
@@ -46,7 +48,7 @@ class NullConfiguration(Configurable):
     def from_path(self, path: Path) -> Configurable:
         return self()
 
-    def get(self, key: str, fallback: Optional[str] = None) -> Optional[str]:
+    def get(self, key: str, fallback: TOMLValue = None) -> TOMLValue:
         return fallback
 
 

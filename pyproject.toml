@@ -31,6 +31,15 @@ publicator = "publicator.cli:app"
 "Bug Tracker" = "https://github.com/nikoheikkila/publicator/issues"
 "Discussions" = "https://github.com/nikoheikkila/publicator/discussions"
 
+[tool.publicator]
+any-branch = false
+clean = true
+publish = true
+push = true
+release-draft = true
+tag = true
+template = "release: %s"
+
 [tool.black]
 line-length = 120
 include = "\\.pyi?$"
