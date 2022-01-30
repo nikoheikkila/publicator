@@ -12,7 +12,7 @@ app = typer.Typer(name="publicator")
 
 @app.command()
 def cli(
-    version: str = typer.Argument(
+    bump: str = typer.Argument(
         ...,
         metavar="version",
         help="can be a valid semver or one of: patch, minor, major, prepatch, preminor, premajor, prerelease",
@@ -55,7 +55,7 @@ def cli(
 
     run_tests(test_script)
 
-    new_version = bump_version(version)
+    new_version = bump_version(bump)
     commit_changes(new_version, template)
 
     if tag:
