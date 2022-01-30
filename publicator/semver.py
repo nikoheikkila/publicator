@@ -25,6 +25,10 @@ class Semver:
     pre_release: str = ""
     build: str = ""
 
+    @property
+    def is_pre_release(self) -> bool:
+        return len(self.pre_release) > 0 or self.major == 0
+
     @classmethod
     def from_string(self, version: str) -> Semver:
         major, minor, patch, pre_release, build = Semver.parse(version)

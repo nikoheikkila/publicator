@@ -21,18 +21,14 @@ def test_new_release_url_with_required_variables(repo: Repo, tag: Semver) -> Non
     assert url == expected
 
 
-def test_new_release_url_with_all_variables(repo: Repo, tag: Semver) -> None:
-    url = github.new_release_url(
-        repo,
-        tag,
-        title=f"Version {tag}",
-        body="# Changelog",
-        pre_release=True,
-    )
+def test_new_release_url_with_all_variables(repo: Repo) -> None:
+    tag = Semver(0, 1, 0)
+
+    url = github.new_release_url(repo, tag, title=f"Version {tag}", body="# Changelog")
 
     expected = (
         "https://github.com/nikoheikkila/publicator/releases/new?"
-        "tag=1.2.3&title=Version+1.2.3&body=%23+Changelog&prerelease=1"
+        "tag=0.1.0&title=Version+0.1.0&body=%23+Changelog&prerelease=1"
     )
 
     assert url == expected
