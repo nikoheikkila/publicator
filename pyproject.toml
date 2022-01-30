@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "publicator"
-version = "0.6.0-alpha.0"
+version = "0.6.0-alpha.1"
 description = "A better poetry publish experience."
 license = "MIT"
 authors = [ "Niko Heikkilä <niko.heikkila@futurice.com>",]
