@@ -57,6 +57,10 @@ def cli(
         help="Opens a pre-filled GitHub release page with browser if the current project is hosted on GitHub",
     ),
 ) -> None:
+    """
+    Handles publishing a new Python package via Poetry safely and conveniently.
+    """
+
     if not any_branch:
         verify_branch()
 
