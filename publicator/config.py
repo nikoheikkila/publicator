@@ -1,0 +1,60 @@
+from __future__ import annotations
+from abc import ABCMeta, abstractclassmethod, abstractmethod
+from pathlib import Path
+from typing import Any, Dict, Optional
+import tomli
+
+Data = Dict[str, Any]
+
+
+class Configurable(metaclass=ABCMeta):
+    values: Data
+
+    @abstractclassmethod
+    def from_path(self, path: Path) -> Configurable:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get(self, key: str, fallback: Optional[str] = None) -> Optional[str]:
+        raise NotImplementedError
+
+
+class Configuration(Configurable):
+    def __init__(self, values: Data = {}) -> None:
+        self.values = values
+
+    @classmethod
+    def from_path(self, path: Path) -> Configurable:
+        section = "tool"
+        subsection = "publicator"
+        items = tomli.loads(path.read_text(encoding="utf-8"))
+
+        if section in items and subsection in items[section]:
+            return self(values=items[section][subsection])
+
+        return NullConfiguration()
+
+    def get(self, key: str, fallback: Optional[str] = None) -> Optional[str]:
+        return self.values.get(key, fallback)
+
+
+class NullConfiguration(Configurable):
+    def __init__(self) -> None:
+        self.values = {}
+
+    @classmethod
+    def from_path(self, path: Path) -> Configurable:
+        return self()
+
+    def get(self, key: str, fallback: Optional[str] = None) -> Optional[str]:
+        return fallback
+
+
+# Factory function
+def factory(filename: str = "pyproject.toml") -> Configurable:
+    path = Path.cwd() / filename
+
+    if not path.is_file():
+        return NullConfiguration()
+
+    return Configuration.from_path(path)

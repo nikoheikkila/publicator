@@ -1,4 +1,3 @@
-from typing import Tuple
 from unittest.mock import MagicMock
 from pytest import fixture
 from pytest_mock import MockerFixture
@@ -12,8 +11,5 @@ def mock_shell(mocker: MockerFixture) -> MagicMock:
 
 
 @fixture()
-def mock_path(mocker: MockerFixture) -> Tuple[MagicMock]:
-    return (
-        mocker.path.object(Path, "read_text", autospec=True),
-        mocker.path.object(Path, "write_text", autospec=True),
-    )
+def mock_read_text(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch.object(Path, "read_text", autospec=True)
