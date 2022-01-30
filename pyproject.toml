@@ -21,7 +21,7 @@ tomli = "1.2.3"
 pytest = "^6.2.5"
 pytest-mock = "^3.6.1"
 mypy = "^0.931"
-black = "^21.12b0"
+black = "^22.1.0"
 flake8 = "^4.0.1"
 
 [tool.poetry.scripts]
