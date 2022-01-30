@@ -1,34 +1,48 @@
-# 🗞 Publicator
+<center><h1>🗞 Publicator</h1></center>
 
 > A better `poetry publish` experience.
 
-While [Poetry](https://python-poetry.org) finally brings us a sane solution for publishing and maintaining Python packages, many developers crave for a more _enhanced_ and safer user experience. Publicator aims to offer a convenient tool for everyday work.
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/publicator)
+![PyPI](https://img.shields.io/pypi/v/publicator)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/publicator)
+![PyPI - License](https://img.shields.io/pypi/l/publicator)
+[![Application Test Suite](https://github.com/nikoheikkila/publicator/actions/workflows/python-package.yml/badge.svg)](https://github.com/nikoheikkila/publicator/actions/workflows/python-package.yml)
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/pypi/publicator)
 
-Licensed under [**MIT**](LICENSE.md).
+While [Poetry](https://python-poetry.org) finally brings us a sane solution for publishing and maintaining Python packages, many developers crave for a more _enhanced_ and safer user experience. Publicator aims to offer a convenient method for publishing your everyday libraries.
+
+Publicator has been inspired by Sindre Sorhus' excellent [`np`](https://github.com/sindresorhus/np) package for Node.js ecosystem and graciously funded by [**Futurice Spice Program**](https://spiceprogram.org).
+
+<h2>Table of Contents</h2>
+
+* [Features](#features)
+* [Prerequisites](#prerequisites)
+* [Install](#install)
+* [Usage](#usage)
+  * [Configuration](#configuration)
+  * [Preview Mode (Dry-Run)](#preview-mode-dry-run)
+  * [Shell Completion](#shell-completion)
+* [Contributing](#contributing)
 
 ## Features
 
-### Supported
-
-- Ensures you are publishing from your release branch (`main` and `master` by default)
-- Ensures the working directory is clean and latest changes are pulled
-- Reinstalls dependencies to ensure your project works with the latest dependency tree
-- Ensures your Python version is supported by the project and its dependencies
-- Runs the tests
-- Bumps the version in `pyproject.toml` and creates a Git tag based on it
-- Publishes the new version to [Python Package Index](https://pypi.org) or custom repository
-- Pushes commits and tags (newly & previously created) to your Git server
-- See what will be executed with preview mode, without pushing or publishing anything remotely
-
-### Planned
-
-- Open a prefilled GitHub Releases draft after publishing
+* Ensures you are publishing from your release branch (`main` and `master` by default)
+* Ensures the working directory is clean and latest changes are pulled
+* Reinstalls dependencies to ensure your project works with the latest dependency tree
+* Ensures your Python version is supported by the project and its dependencies
+* Runs the tests with custom test script (defaults to `poetry run pytest`)
+* Bumps the version in `pyproject.toml` and creates a Git tag based on it
+* Publishes the new version to [Python Package Index](https://pypi.org) or custom repository
+* Pushes commits and tags (newly & previously created) to your Git server
+* If the project is hosted on GitHub opens a prefilled GitHub Releases draft after publishing
+* Fully configurable via command-line arguments or the `pyproject.toml` file
+* See what will be executed with preview mode, without pushing or publishing anything remotely
 
 ## Prerequisites
 
-- **Python 3.8** or later
-- **Poetry 1.1** or later
-- **Git 2.11** or later
+* **Python 3.8** or later
+* **Poetry 1.1** or later
+* **Git 2.11** or later
 
 ## Install
 
@@ -89,9 +103,26 @@ Options:
 
 ### Configuration
 
-Flags described above enable more granular usage. For example, in CI/CD pipelines you might want to disable publishing the package to registry or disable creating Git tags depending on your use case.
+Publicator follows the pleasantly Pythonic way of specifying the configuration within `pyproject.toml` file. Below are the default configuration values.
 
-If you'd rather skip on everything and check what would be executed (_dry run_), you can activate a preview mode via environment variable like so:
+```toml
+[tool.publicator]
+any-branch    = false
+clean         = true
+publish       = true
+push          = true
+release-draft = true
+tag           = true
+template      = "release: %s"
+```
+
+Values passed as command-line arguments take precedence over configuration file values.
+
+Configuration enables for more granular usage. For example, in CI/CD pipelines you might want to disable publishing the package to registry or disable creating Git tags depending on your use case.
+
+### Preview Mode (Dry-Run)
+
+If you'd rather skip on everything and check what would be executed, you can activate a preview mode via environment variable like so:
 
 ```sh
 PUBLICATOR_PREVIEW=true publicator <version>
