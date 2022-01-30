@@ -1,4 +1,4 @@
-<center><h1>🗞 Publicator</h1></center>
+<h1>🗞 Publicator</h1>
 
 > A better `poetry publish` experience.
 
