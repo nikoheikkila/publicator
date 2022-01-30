@@ -1,13 +1,23 @@
 import os
 from typing import Optional
+
 import typer
 
-from publicator import git, github, poetry, config
+import publicator
+from publicator import config, git, github, poetry
 from publicator.semver import Semver
 
 preview = os.environ.get("PUBLICATOR_PREVIEW")
 configuration = config.factory()
-app = typer.Typer(name="publicator")
+app = typer.Typer(name=publicator.name)
+
+
+def version_callback(value: bool) -> None:
+    if not value:
+        return
+
+    typer.secho(f"🦄 {publicator.version()}", fg=typer.colors.BRIGHT_BLUE, bold=True)
+    raise typer.Exit()
 
 
 @app.command()
@@ -17,6 +27,7 @@ def cli(
         metavar="version",
         help="can be a valid semver or one of: patch, minor, major, prepatch, preminor, premajor, prerelease",
     ),
+    version: Optional[bool] = typer.Option(None, "--version", "-V", callback=version_callback, is_eager=True),
     repository: Optional[str] = typer.Option(
         default=configuration.get("repository"),
         metavar="name",

@@ -15,4 +15,5 @@ for wheel in dist/*.whl; do
 done
 
 echo "Testing executable"
+publicator --version
 publicator --help
