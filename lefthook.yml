@@ -1,7 +1,10 @@
 pre-push:
+  parallel: true
   commands:
     pytest:
       run: poetry run pytest
+    mutation:
+      run: poetry run mutmut run
 
 pre-commit:
   parallel: true
