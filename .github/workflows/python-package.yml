@@ -46,6 +46,3 @@ jobs:
 
     - name: Run unit tests
       run: poetry run pytest --verbose
-
-    - name: Run mutation tests
-      run: poetry run mutmut run --simple-output
