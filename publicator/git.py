@@ -32,12 +32,12 @@ class Repo:
     name: str = ""
 
     @classmethod
-    def from_remote(self) -> Repo:
+    def from_remote(cls) -> Repo:
         parser = RemoteParser()
         remote = shell.run("git remote get-url --push origin").pop()
         values = parser.parse(remote)
 
-        return self(server=values.get("server", ""), owner=values.get("owner", ""), name=values.get("name", ""))
+        return cls(server=values.get("server", ""), owner=values.get("owner", ""), name=values.get("name", ""))
 
     @property
     def is_github(self) -> bool:

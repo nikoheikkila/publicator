@@ -30,7 +30,7 @@ class Semver:
         return len(self.pre_release) > 0 or self.major == 0
 
     @classmethod
-    def from_string(self, version: str) -> Semver:
+    def from_string(cls, version: str) -> Semver:
         major, minor, patch, pre_release, build = Semver.parse(version)
         return Semver(int(major), int(minor), int(patch), pre_release, build)
 

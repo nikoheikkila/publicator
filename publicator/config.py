@@ -26,13 +26,13 @@ class Configuration(Configurable):
         self.values = values
 
     @classmethod
-    def from_path(self, path: Path) -> Configurable:
+    def from_path(cls, path: Path) -> Configurable:
         section = "tool"
         subsection = "publicator"
         items = tomli.loads(path.read_text(encoding="utf-8"))
 
         if section in items and subsection in items[section]:
-            return self(values=items[section][subsection])
+            return cls(values=items[section][subsection])
 
         return NullConfiguration()
 
@@ -45,8 +45,8 @@ class NullConfiguration(Configurable):
         self.values = {}
 
     @classmethod
-    def from_path(self, path: Path) -> Configurable:
-        return self()
+    def from_path(cls, path: Path) -> Configurable:
+        return cls()
 
     def get(self, key: str, fallback: TOMLValue = None) -> TOMLValue:
         return fallback
