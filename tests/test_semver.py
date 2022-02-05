@@ -87,9 +87,30 @@ INVALID_VERSIONS = [
 ]
 
 
+def test_initial_semver() -> None:
+    assert Semver() == Semver.from_string("0.1.0")
+
+
+def test_initial_pre_release() -> None:
+    version = Semver()
+    assert version.pre_release == ""
+
+
+def test_initial_build() -> None:
+    version = Semver()
+    assert version.build == ""
+
+
+def test_inequality() -> None:
+    assert Semver() != object()
+
+
 @mark.parametrize("version,expected", VALID_VERSIONS)
-def test_semver(version: str, expected: Semver) -> None:
-    assert Semver.from_string(version) == expected
+def test_semver_from_string(version: str, expected: Semver) -> None:
+    semver = Semver.from_string(version)
+
+    assert semver == expected
+    assert str(semver) == version
 
 
 @mark.parametrize("version", INVALID_VERSIONS)

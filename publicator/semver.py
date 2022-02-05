@@ -17,7 +17,7 @@ class SemverException(Exception):
     pass
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True)  # pragma: no mutate
 class Semver:
     major: int = 0
     minor: int = 1
@@ -27,20 +27,19 @@ class Semver:
 
     @property
     def is_pre_release(self) -> bool:
-        return len(self.pre_release) > 0 or self.major == 0
+        if self.pre_release:
+            return True
+
+        return self.major == 0
 
     @classmethod
     def from_string(cls, version: str) -> Semver:
-        major, minor, patch, pre_release, build = Semver.parse(version)
-        return Semver(int(major), int(minor), int(patch), pre_release, build)
-
-    @staticmethod
-    def parse(version: str) -> Tuple[str, str, str, str, str]:
         if not SEMVER_REGEX.fullmatch(version):
             raise SemverException(f"Version string {version} is not a valid semantic version")
 
-        result: Tuple[str, str, str, str, str] = SEMVER_REGEX.findall(version).pop()
-        return result
+        major, minor, patch, pre_release, build = SEMVER_REGEX.findall(version).pop()
+
+        return Semver(int(major), int(minor), int(patch), pre_release, build)
 
     def as_tuple(self) -> Tuple[int, int, int]:
         return (self.major, self.minor, self.patch)

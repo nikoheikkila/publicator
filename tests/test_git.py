@@ -5,7 +5,9 @@ from publicator.semver import Semver
 
 
 def test_get_current_branch(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = ["main"]
+    effects = {"git symbolic-ref --short HEAD": ["main"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
     assert git.current_branch() == "main"
 
 
@@ -14,53 +16,70 @@ def test_get_release_branches() -> None:
 
 
 def test_working_directory_is_clean(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = []
+    mock_shell.side_effect = lambda _: []
     assert git.is_working_directory_clean()
 
 
 def test_working_directory_is_dirty(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = ["M poetry.lock", "M pyproject.toml"]
+    effects = {"git status --porcelain": ["M poetry.lock", "M pyproject.toml"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
     assert not git.is_working_directory_clean()
 
 
 def test_stash(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = ["Saved working directory and index state WIP on main"]
+    effects = {"git stash -u": ["Saved working directory and index state WIP on main"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
     assert git.stash()
 
 
 def test_pull(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = ["Everything up-to-date"]
+    effects = {"git pull --rebase": ["Everything up-to-date"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
     assert git.pull()
 
 
 def test_pop(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = ["Dropped refs"]
+    effects = {"git stash pop": ["Dropped refs"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
     assert git.pop()
 
 
 def test_add_changes(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = [""]
+    effects = {"git add pyproject.toml": [""]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
     assert git.add()
 
 
 def test_commit_changes(mock_shell: MagicMock) -> None:
     expected_output = ["1 file changed"]
-    mock_shell.return_value = expected_output
+    effects = {'git commit -m "release: 1.2.3"': expected_output}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
     assert git.commit(message="release: 1.2.3") == expected_output
 
 
 def test_creating_tag(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = [""]
+    effects = {'git tag -a 1.2.3 -m "Version 1.2.3"': [""]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
     assert git.create_tag(version=Semver(1, 2, 3), message="Version 1.2.3")
 
 
 def test_pushing_changes(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = ["Everything up-to-date"]
+    effects = {"git push --follow-tags": ["Everything up-to-date"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
     assert git.push()
 
 
 def test_extract_repo_from_remote(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = ["git@github.com:nikoheikkila/publicator.git"]
+    effects = {"git remote get-url --push origin": ["git@github.com:nikoheikkila/publicator.git"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
 
     repo = git.Repo.from_remote()
 
@@ -70,7 +89,8 @@ def test_extract_repo_from_remote(mock_shell: MagicMock) -> None:
 
 
 def test_extract_repo_from_invalid_remote(mock_shell: MagicMock) -> None:
-    mock_shell.return_value = ["no remote"]
+    effects = {"git remote get-url --push origin": ["no remote"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
 
     repo = git.Repo.from_remote()
 
