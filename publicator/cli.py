@@ -68,7 +68,8 @@ def cli(
         clean_up()
         install_dependencies()
 
-    run_tests(test_script)
+    if test_script:
+        run_tests(test_script)
 
     new_version = bump_version(bump)
     commit_changes(new_version, template)
