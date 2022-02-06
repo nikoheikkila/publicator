@@ -1,4 +1,6 @@
 from unittest.mock import MagicMock
+from hypothesis import given
+from hypothesis.strategies import builds, text, just
 
 from publicator import git
 from publicator.semver import Semver
@@ -97,11 +99,11 @@ def test_extract_repo_from_invalid_remote(mock_shell: MagicMock) -> None:
     assert repo == git.Repo()
 
 
-def test_repo_is_from_github() -> None:
-    repo = git.Repo(server="github.com")
+@given(builds(git.Repo, server=just("github.com"), owner=text(), name=text()))
+def test_repo_is_from_github(repo: git.Repo) -> None:
     assert repo.is_github
 
 
-def test_repo_is_not_from_github() -> None:
-    repo = git.Repo(server="gitlab.com")
+@given(builds(git.Repo, server=just("gitlab.com"), owner=text(), name=text()))
+def test_repo_is_not_from_github(repo: git.Repo) -> None:
     assert not repo.is_github
