@@ -55,6 +55,11 @@ testpaths = [
     "tests",
 ]
 
+[tool.mutmut]
+paths_to_mutate = "publicator/"
+paths_to_exclude = "publicator/cli.py"
+tests_dir = "tests/"
+
 [build-system]
 requires = [ "poetry-core>=1.0.0",]
 build-backend = "poetry.core.masonry.api"
