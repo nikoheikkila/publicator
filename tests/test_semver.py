@@ -1,4 +1,6 @@
 from pytest import mark, raises
+from hypothesis import given
+from hypothesis.strategies import builds, integers, text, just
 
 from publicator.semver import Semver, SemverException
 
@@ -92,13 +94,11 @@ def test_initial_semver() -> None:
 
 
 def test_initial_pre_release() -> None:
-    version = Semver()
-    assert version.pre_release == ""
+    assert Semver().pre_release == ""
 
 
 def test_initial_build() -> None:
-    version = Semver()
-    assert version.build == ""
+    assert Semver().build == ""
 
 
 def test_inequality() -> None:
@@ -119,14 +119,11 @@ def test_invalid_semver(version: str) -> None:
         Semver.from_string(version)
 
 
-@mark.parametrize(
-    "version,expected",
-    [
-        ["0.9.9", True],
-        ["1.0.0-rc.1+build.1", True],
-        ["1.2.3", False],
-        ["1.0.0+build.1", False],
-    ],
-)
-def test_is_pre_release(version: str, expected: bool) -> None:
-    assert Semver.from_string(version).is_pre_release is expected
+@given(builds(Semver, major=just(0), minor=integers(), patch=integers(), pre_release=text(), build=text()))
+def test_0_x_is_pre_release(semver: Semver) -> None:
+    assert semver.is_pre_release
+
+
+@given(builds(Semver, major=integers(), minor=integers(), patch=integers(), pre_release=text(min_size=1), build=text()))
+def test_is_marked_pre_release(semver: Semver) -> None:
+    assert semver.is_pre_release
