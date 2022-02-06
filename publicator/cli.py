@@ -76,9 +76,8 @@ def cli(
     if tag:
         create_tag(new_version)
 
-    build_package()
-
     if publish:
+        build_package()
         publish_package(repository)
 
     if push:
