@@ -30,7 +30,7 @@ Publicator has been inspired by Sindre Sorhus' excellent [`np`](https://github.c
 * Ensures the working directory is clean and latest changes are pulled
 * Reinstalls dependencies to ensure your project works with the latest dependency tree
 * Ensures your Python version is supported by the project and its dependencies
-* Runs the tests with custom test script (defaults to `poetry run pytest`)
+* Runs the tests with custom test script
 * Bumps the version in `pyproject.toml` and creates a Git tag based on it
 * Publishes the new version to [Python Package Index](https://pypi.org) or custom repository
 * Pushes commits and tags (newly & previously created) to your Git server
@@ -82,11 +82,14 @@ $ publicator --help
 
 Usage: publicator [OPTIONS] version
 
+  Handles publishing a new Python package via Poetry safely and conveniently.
+
 Arguments:
   version  can be a valid semver or one of: patch, minor, major, prepatch,
            preminor, premajor, prerelease  [required]
 
 Options:
+  -V, --version
   --repository name               Custom repository for publishing (must be
                                   specified in pyproject.toml)
   --any-branch / --no-any-branch  Allow publishing from any branch  [default:
@@ -100,7 +103,7 @@ Options:
                                   push]
   --test-script TEXT              Name of the test script to run under the
                                   current virtual environment  [default:
-                                  pytest]
+                                  pytest -x --assert=plain]
   --template TEXT                 Commit message template (`%s` will be
                                   replaced with the new version tag)
                                   [default: release: %s]

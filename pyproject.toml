@@ -41,6 +41,7 @@ push = true
 release-draft = true
 tag = true
 template = "release: %s"
+test-script = "pytest -x --assert=plain"
 
 [tool.black]
 line-length = 120

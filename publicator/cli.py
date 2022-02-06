@@ -45,7 +45,7 @@ def cli(
     ),
     push: bool = typer.Option(default=configuration.get("push", True), help="Push commits and tags to Git"),
     test_script: str = typer.Option(
-        default=configuration.get("test-script", "pytest"),
+        default=configuration.get("test-script", "pytest -x --assert=plain"),
         help="Name of the test script to run under the current virtual environment",
     ),
     template: str = typer.Option(
