@@ -325,7 +325,7 @@ dev = ["pre-commit", "tox", "pytest-asyncio"]
 
 [[package]]
 name = "semmy"
-version = "0.2.0"
+version = "0.4.0"
 description = "Semantic versioning made easy for Python"
 category = "main"
 optional = false
@@ -383,7 +383,7 @@ python-versions = ">=3.6"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8"
-content-hash = "326b783c2119d18a17e9237cf94fdf70ebe8520ad6f8353578e38c16433b1ac2"
+content-hash = "95c3c6159b703c26c62e719f1f290a9f43f9f1b51ecde1ba840cd92552fd5831"
 
 [metadata.files]
 atomicwrites = [
@@ -530,8 +530,8 @@ pytest-mock = [
     {file = "pytest_mock-3.7.0-py3-none-any.whl", hash = "sha256:6cff27cec936bf81dc5ee87f07132b807bcda51106b5ec4b90a04331cba76231"},
 ]
 semmy = [
-    {file = "semmy-0.2.0-py3-none-any.whl", hash = "sha256:0ab886325cf960fb7e33b517452bcb7c90ace3185373f954e4d3875e1092580f"},
-    {file = "semmy-0.2.0.tar.gz", hash = "sha256:6c397de06041ac1ae4b5fecc9d6473c21f64ab8ecd0f82a28205519635830455"},
+    {file = "semmy-0.4.0-py3-none-any.whl", hash = "sha256:35091da7b530fa8260dd34ab753a67d4d22a6cdef8321cc3a5f4b396775b70f0"},
+    {file = "semmy-0.4.0.tar.gz", hash = "sha256:dfa5d0ac32fb3b72cddfbb310078a036173be411caf6a406a5831e92554d9aa0"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
