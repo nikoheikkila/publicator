@@ -3,7 +3,7 @@ from hypothesis import given
 from hypothesis.strategies import builds, text, just
 
 from publicator import git
-from publicator.semver import Semver
+from semmy import Semver
 
 
 def test_get_current_branch(mock_shell: MagicMock) -> None:

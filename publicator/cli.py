@@ -5,7 +5,7 @@ import typer
 
 import publicator
 from publicator import config, git, github, poetry
-from publicator.semver import Semver
+from semmy import Semver
 
 preview = os.environ.get("PUBLICATOR_PREVIEW")
 configuration = config.factory()

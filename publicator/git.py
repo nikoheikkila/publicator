@@ -6,7 +6,7 @@ from typing import List, Mapping, Tuple
 from parse import compile, Parser, Result
 
 from publicator import shell
-from publicator.semver import Semver
+from semmy import Semver
 
 
 class RemoteParser:

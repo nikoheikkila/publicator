@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 from publicator import poetry
-from publicator.semver import Semver
+from semmy import Semver
 
 
 def test_poetry_install(mock_shell: MagicMock) -> None:

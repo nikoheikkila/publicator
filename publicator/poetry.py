@@ -1,6 +1,6 @@
 from typing import List, Optional
 from publicator import shell
-from publicator.semver import Semver
+from semmy import Semver
 
 
 def install() -> List[str]:

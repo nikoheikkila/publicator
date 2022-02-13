@@ -1,6 +1,6 @@
 from pytest import fixture, raises
 from publicator import github
-from publicator.semver import Semver
+from semmy import Semver
 from publicator.git import Repo
 
 
