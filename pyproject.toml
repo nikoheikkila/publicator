@@ -21,7 +21,7 @@ semmy = "^1.0.0"
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.0"
 pytest-mock = "^3.6.1"
-mypy = "^0.941"
+mypy = "^0.942"
 black = "^22.1.0"
 flake8 = "^4.0.1"
 mutmut = "^2.2.0"
