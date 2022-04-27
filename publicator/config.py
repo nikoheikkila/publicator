@@ -1,5 +1,5 @@
 from __future__ import annotations
-from abc import ABCMeta, abstractclassmethod, abstractmethod
+from abc import ABCMeta, abstractmethod
 from pathlib import Path
 from typing import Dict, Union
 import tomli
@@ -12,7 +12,7 @@ Data = Dict[TOMLKey, TOMLValue]
 class Configurable(metaclass=ABCMeta):
     values: Data
 
-    @abstractclassmethod
+    @classmethod
     def from_path(self, path: Path) -> Configurable:
         raise NotImplementedError
 
