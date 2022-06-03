@@ -25,7 +25,7 @@ class RemoteParser:
         return named
 
 
-@dataclass(frozen=True)  # pragma: no mutate
+@dataclass(frozen=True)
 class Repo:
     server: str = ""
     owner: str = ""
