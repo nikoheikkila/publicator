@@ -1,0 +1,48 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+
+  install:
+    desc: Install dependencies with Poetry
+    sources:
+      - pyproject.toml
+      - poetry.lock
+    cmds:
+      - poetry install
+
+  format:
+    desc: Format codebase with Black
+    deps:
+      - install
+    sources:
+      - publicator/**/*.py
+      - tests/**/*.py
+    cmds:
+      - poetry run black .
+
+  lint:
+    desc: Lint codebase for issues
+    sources:
+      - publicator/**/*.py
+      - tests/**/*.py
+    deps:
+      - install
+    cmds:
+      - poetry run flake8 .
+      - poetry run mypy --strict -p publicator
+
+  test:
+    desc: Run all the tests
+    deps:
+      - lint
+    cmds:
+      - task: "test:unit"
+
+  "test:unit":
+    sources:
+      - publicator/**/*.py
+      - tests/**/*.py
+    cmds:
+      - poetry run pytest
