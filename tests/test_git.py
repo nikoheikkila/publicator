@@ -79,6 +79,21 @@ def test_pushing_changes(mock_shell: MagicMock) -> None:
     assert git.push()
 
 
+def test_extract_repo_from_invalid_remote(mock_shell: MagicMock) -> None:
+    effects = {"git remote get-url --push origin": ["no remote"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
+    repo = git.Repo.from_remote()
+
+    assert repo == git.Repo()
+
+
+def test_remote_parser_initializes_correctly() -> None:
+    remote = git.RemoteParser()
+
+    assert remote.parser._expression == r"git@(?P<server>.+?):(?P<owner>.+?)/(?P<name>.+?)\.git"
+
+
 def test_extract_repo_from_remote(mock_shell: MagicMock) -> None:
     effects = {"git remote get-url --push origin": ["git@github.com:nikoheikkila/publicator.git"]}
     mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
@@ -90,13 +105,11 @@ def test_extract_repo_from_remote(mock_shell: MagicMock) -> None:
     assert repo.name == "publicator"
 
 
-def test_extract_repo_from_invalid_remote(mock_shell: MagicMock) -> None:
-    effects = {"git remote get-url --push origin": ["no remote"]}
-    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+def test_remote_parser_with_invalid_git_remote() -> None:
+    remote = git.RemoteParser()
+    result = remote.parse("nonsense")
 
-    repo = git.Repo.from_remote()
-
-    assert repo == git.Repo()
+    assert not result.keys()
 
 
 @given(builds(git.Repo, server=just("github.com"), owner=text(), name=text()))
