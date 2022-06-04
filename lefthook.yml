@@ -1,16 +1,10 @@
 pre-push:
   commands:
-    pytest:
-      run: poetry run pytest
+    test:
+      run: task test
 
 pre-commit:
   parallel: true
   commands:
-    black:
-      glob: "*.py"
-      run: poetry run black --check {staged_files}
-    flake8:
-      glob: "*.py"
-      run: poetry run flake8 {staged_files}
-    mypy:
-      run: poetry run mypy --strict -p publicator
+    lint:
+      run: task lint
