@@ -40,6 +40,7 @@ tasks:
       - lint
     cmds:
       - task: "test:unit"
+      - task: "test:mutation"
 
   "test:unit":
     sources:
@@ -47,3 +48,9 @@ tasks:
       - tests/**/*.py
     cmds:
       - poetry run pytest
+
+  "test:mutation":
+    sources:
+      - tests/**/*.py
+    cmds:
+      - poetry run mutatest

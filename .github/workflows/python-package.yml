@@ -44,5 +44,5 @@ jobs:
     - name: Check code typing
       run: poetry run mypy --strict -p publicator
 
-    - name: Run unit tests
-      run: poetry run pytest --verbose
+    - name: Run unit and mutation tests
+      run: poetry run mutatest
