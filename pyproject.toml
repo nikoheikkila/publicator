@@ -25,6 +25,7 @@ mypy = "^0.950"
 black = "^22.1.0"
 flake8 = "^4.0.1"
 hypothesis = "^6.36.1"
+mutatest = "^3.1.0"
 
 [tool.poetry.scripts]
 publicator = "publicator.cli:app"
