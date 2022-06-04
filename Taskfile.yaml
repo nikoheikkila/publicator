@@ -30,6 +30,7 @@ tasks:
     deps:
       - install
     cmds:
+      - poetry run black --check .
       - poetry run flake8 .
       - poetry run mypy --strict -p publicator
 
