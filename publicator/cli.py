@@ -2,6 +2,7 @@ import os
 from typing import Optional
 
 import typer
+from rich import print
 
 import publicator
 from publicator import config, git, github, poetry
@@ -16,7 +17,7 @@ def version_callback(value: bool) -> None:
     if not value:
         return
 
-    typer.secho(f"🦄 {publicator.version()}", fg=typer.colors.BRIGHT_BLUE, bold=True)
+    print(f"[bold blue]:unicorn_face: {publicator.version()}[/bold blue]")
     raise typer.Exit()
 
 
@@ -91,19 +92,19 @@ def cli(
 
 
 def info(message: str) -> None:
-    typer.secho(f"📢 {message}", fg=typer.colors.BRIGHT_BLUE)
+    print(f"[blue]:megaphone: {message}[/blue]")
 
 
 def success(message: str) -> None:
-    typer.secho(f"🎉 {message}", fg=typer.colors.BRIGHT_GREEN, bold=True)
+    print(f"[bold green]:party_popper: {message}[/bold green]")
 
 
 def warn(message: str) -> None:
-    typer.secho(f"⚠️ {message}", fg=typer.colors.BRIGHT_YELLOW)
+    print(f"[yellow]:heavy_exclamation_mark: {message}[/yellow]")
 
 
 def fatal(message: str, exit_code: int = 1) -> None:
-    typer.secho(f"❌ {message}", fg=typer.colors.BRIGHT_RED, bold=True)
+    print(f"[bold red]:cross_mark: {message}[/bold red]")
     raise typer.Exit(code=exit_code)
 
 
