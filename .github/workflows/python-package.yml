@@ -42,7 +42,7 @@ jobs:
       run: poetry run flake8 --show-source .
 
     - name: Check code typing
-      run: poetry run mypy --strict -p publicator
+      run: poetry run mypy -p publicator
 
     - name: Run unit tests
       run: poetry run pytest --verbose

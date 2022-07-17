@@ -13,4 +13,4 @@ pre-commit:
       glob: "*.py"
       run: poetry run flake8 {staged_files}
     mypy:
-      run: poetry run mypy --strict -p publicator
+      run: poetry run mypy -p publicator
