@@ -23,7 +23,7 @@ pytest = "^7.0.0"
 pytest-mock = "^3.6.1"
 mypy = "^0.971"
 black = "^22.1.0"
-flake8 = "^4.0.1"
+flake8 = "^5.0.0"
 hypothesis = "^6.36.1"
 
 [tool.poetry.scripts]
