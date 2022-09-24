@@ -1,7 +1,7 @@
-from pytest import fixture, raises
 from publicator import github
-from semmy import Semver
 from publicator.git import Repo
+from pytest import fixture, raises
+from semmy import Semver
 
 
 @fixture()
@@ -37,7 +37,7 @@ def test_new_release_url_with_all_variables(repo: Repo) -> None:
 def test_new_release_url_throws_for_non_github_repos(tag: Semver) -> None:
     repo = Repo(server="bitbucket.org", owner="user", name="stuff")
 
-    with raises(github.ReleaseException, match="Current repository is not hosted on github.com"):
+    with raises(AssertionError, match="Current repository is not hosted on github.com"):
         github.new_release_url(
             repo,
             tag,

@@ -1,12 +1,12 @@
 import os
-from typing import Optional
+from typing import NoReturn, Optional
 
 import typer
 from rich import print
+from semmy import Semver
 
 import publicator
 from publicator import config, git, github, poetry
-from semmy import Semver
 
 preview = os.environ.get("PUBLICATOR_PREVIEW")
 configuration = config.factory()
@@ -103,23 +103,23 @@ def warn(message: str) -> None:
     print(f"[yellow]:heavy_exclamation_mark: {message}[/yellow]")
 
 
-def fatal(message: str, exit_code: int = 1) -> None:
+def fatal(message: str, exit_code: int = 1) -> NoReturn:
     print(f"[bold red]:cross_mark: {message}[/bold red]")
     raise typer.Exit(code=exit_code)
 
 
 def draft_new_release(tag: Semver) -> None:
-    repo = git.Repo.from_remote()
-
     info("Opening GitHub release draft in browser")
 
     if preview:
         return
 
+    repo = git.Repo.from_remote()
+
     try:
         url = github.new_release_url(repo, tag, title=f"Version {tag}", body="Write here")
         typer.launch(url)
-    except github.ReleaseException as error:
+    except Exception as error:
         warn(f"Skipping release draft. Reason: {error}")
 
 
@@ -151,10 +151,12 @@ def commit_changes(semver: Semver, template: str) -> None:
     message = template % (semver)
     info(f'Committing changes with message: "{message}"')
 
-    if not preview:
-        poetry.ok()
-        git.add()
-        git.commit(message)
+    if preview:
+        return
+
+    poetry.ok()
+    git.add()
+    git.commit(message)
 
 
 def bump_version(version: str) -> Semver:
@@ -182,14 +184,13 @@ def install_dependencies() -> None:
 
 
 def clean_up() -> None:
-    if git.is_working_directory_clean():
+    if preview or git.is_working_directory_clean():
         return
 
-    if not preview:
-        info("Resetting working directory to a clean state")
-        git.stash()
-        git.pull()
-        git.pop()
+    info("Resetting working directory to a clean state")
+    git.stash()
+    git.pull()
+    git.pop()
 
 
 def verify_branch() -> None:
