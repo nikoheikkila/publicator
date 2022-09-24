@@ -31,7 +31,7 @@ tasks:
       - install
     cmds:
       - poetry run flake8 .
-      - poetry run mypy -p publicator
+      - poetry run mypy --strict -p publicator
 
   test:
     desc: Run all the tests
