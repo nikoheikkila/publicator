@@ -1,4 +1,5 @@
 import os
+from subprocess import CalledProcessError
 from typing import NoReturn, Optional
 
 import typer
@@ -103,6 +104,10 @@ def warn(message: str) -> None:
     print(f"[yellow]:heavy_exclamation_mark: {message}[/yellow]")
 
 
+def error(message: str) -> None:
+    print(f"[red]:cross_mark: {message}[/red]")
+
+
 def fatal(message: str, exit_code: int = 1) -> NoReturn:
     print(f"[bold red]:cross_mark: {message}[/bold red]")
     raise typer.Exit(code=exit_code)
@@ -119,7 +124,7 @@ def draft_new_release(tag: Semver) -> None:
     try:
         url = github.new_release_url(repo, tag, title=f"Version {tag}", body="Write here")
         typer.launch(url)
-    except Exception as error:
+    except AssertionError as error:
         warn(f"Skipping release draft. Reason: {error}")
 
 
@@ -131,20 +136,40 @@ def push_changes() -> None:
 
 def publish_package(repository: Optional[str]) -> None:
     info("Publishing the package to repository")
-    if not preview:
+    if preview:
+        return
+
+    try:
         poetry.publish(repository)
+    except CalledProcessError as e:
+        error(e.stderr)
+        fatal("Failed to publish the package", exit_code=e.returncode)
 
 
 def build_package() -> None:
     info("Building the package")
-    if not preview:
+
+    if preview:
+        return
+
+    try:
         poetry.build()
+    except CalledProcessError as e:
+        error(e.stderr)
+        fatal("Failed to build the package", exit_code=e.returncode)
 
 
 def create_tag(version: Semver) -> None:
     info(f"Creating a new tag {version} from HEAD")
-    if not preview:
+
+    if preview:
+        return
+
+    try:
         git.create_tag(version, message=f"Version {version}")
+    except CalledProcessError as e:
+        error(e.stderr)
+        fatal("Failed to create a new tag", exit_code=e.returncode)
 
 
 def commit_changes(semver: Semver, template: str) -> None:
@@ -154,9 +179,13 @@ def commit_changes(semver: Semver, template: str) -> None:
     if preview:
         return
 
-    poetry.ok()
-    git.add()
-    git.commit(message)
+    try:
+        poetry.ok()
+        git.add()
+        git.commit(message)
+    except CalledProcessError as e:
+        error(e.stderr)
+        fatal("Failed to commit changes", exit_code=e.returncode)
 
 
 def bump_version(version: str) -> Semver:
@@ -165,7 +194,12 @@ def bump_version(version: str) -> Semver:
     if preview:
         return current_version
 
-    next_version = poetry.bump(version)
+    try:
+        next_version = poetry.bump(version)
+    except CalledProcessError as e:
+        error(e.stderr)
+        fatal("Failed to bump the version", exit_code=e.returncode)
+
     info(f"Bumped version from {current_version} to {next_version}")
 
     return next_version
@@ -173,14 +207,28 @@ def bump_version(version: str) -> Semver:
 
 def run_tests(script: str) -> None:
     info(f"Running tests with '{script}'")
-    if not preview:
+
+    if preview:
+        return
+
+    try:
         poetry.run(script)
+    except CalledProcessError as e:
+        error(e.stderr)
+        fatal("Test run failed", exit_code=e.returncode)
 
 
 def install_dependencies() -> None:
-    info("Reinstalling dependencies")
-    if not preview:
+    info("Reinstalling project dependencies from pyproject.toml")
+
+    if preview:
+        return
+
+    try:
         poetry.install()
+    except CalledProcessError as e:
+        error(e.stderr)
+        fatal("Failed reinstalling the project dependencies", exit_code=e.returncode)
 
 
 def clean_up() -> None:
@@ -188,9 +236,14 @@ def clean_up() -> None:
         return
 
     info("Resetting working directory to a clean state")
-    git.stash()
-    git.pull()
-    git.pop()
+
+    try:
+        git.stash()
+        git.pull()
+        git.pop()
+    except CalledProcessError as e:
+        error(e.stderr)
+        fatal("Failed to reset the working directory to a clean state", exit_code=e.returncode)
 
 
 def verify_branch() -> None:
