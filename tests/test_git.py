@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
-from hypothesis import given
-from hypothesis.strategies import builds, text, just
 
+from hypothesis import given
+from hypothesis.strategies import builds, just, text
 from publicator import git
 from semmy import Semver
 
@@ -72,11 +72,25 @@ def test_creating_tag(mock_shell: MagicMock) -> None:
     assert git.create_tag(version=Semver(1, 2, 3), message="Version 1.2.3")
 
 
+def test_deleting_tag(mock_shell: MagicMock) -> None:
+    effects = {"git tag -d 1.2.3": ["Deleted tag '1.2.3'"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
+    assert git.delete_tag(version=Semver(1, 2, 3))
+
+
 def test_pushing_changes(mock_shell: MagicMock) -> None:
     effects = {"git push --follow-tags": ["Everything up-to-date"]}
     mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
 
     assert git.push()
+
+
+def test_reset(mock_shell: MagicMock) -> None:
+    effects = {"git reset --hard": ["HEAD is now at abc1234 chore: initial commit"]}
+    mock_shell.side_effect = lambda cmd: effects.get(cmd, [])
+
+    assert git.reset()
 
 
 def test_extract_repo_from_invalid_remote(mock_shell: MagicMock) -> None:

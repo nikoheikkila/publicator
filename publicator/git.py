@@ -1,12 +1,13 @@
 """Git operations"""
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import List, Mapping, Tuple
 
-from parse import compile, Parser, Result
+from parse import Parser, Result, compile
+from semmy import Semver
 
 from publicator import shell
-from semmy import Semver
 
 
 class RemoteParser:
@@ -84,5 +85,13 @@ def create_tag(version: Semver, message: str) -> List[str]:
     return shell.run(f'git tag -a {version} -m "{message.strip()}"')
 
 
+def delete_tag(version: Semver) -> List[str]:
+    return shell.run(f"git tag -d {version}")
+
+
 def push() -> List[str]:
     return shell.run("git push --follow-tags")
+
+
+def reset() -> List[str]:
+    return shell.run("git reset --hard")

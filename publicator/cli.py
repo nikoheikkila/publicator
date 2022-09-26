@@ -81,7 +81,7 @@ def cli(
 
     if publish:
         build_package()
-        publish_package(repository)
+        publish_package(repository, new_version)
 
     if push:
         push_changes()
@@ -114,7 +114,7 @@ def fatal(message: str, exit_code: int = 1) -> NoReturn:
 
 
 def draft_new_release(tag: Semver) -> None:
-    info("Opening GitHub release draft in browser")
+    info("Opening GitHub release draft in browser...")
 
     if preview:
         return
@@ -129,25 +129,35 @@ def draft_new_release(tag: Semver) -> None:
 
 
 def push_changes() -> None:
-    info("Pushing changes to Git")
-    if not preview:
+    info("Pushing changes to Git...")
+
+    if preview:
+        return
+
+    try:
         git.push()
+    except CalledProcessError as e:
+        error(e.stderr)
+        fatal("Failed to push changes to Git!", exit_code=e.returncode)
 
 
-def publish_package(repository: Optional[str]) -> None:
-    info("Publishing the package to repository")
+def publish_package(repository: Optional[str], version: Semver) -> None:
+    info("Publishing the package to repository...")
+
     if preview:
         return
 
     try:
         poetry.publish(repository)
     except CalledProcessError as e:
+        git.delete_tag(version)
+        git.reset()
         error(e.stderr)
-        fatal("Failed to publish the package", exit_code=e.returncode)
+        fatal("Failed to publish the package! Repository state has been reset.", exit_code=e.returncode)
 
 
 def build_package() -> None:
-    info("Building the package")
+    info("Building the package...")
 
     if preview:
         return
@@ -156,11 +166,11 @@ def build_package() -> None:
         poetry.build()
     except CalledProcessError as e:
         error(e.stderr)
-        fatal("Failed to build the package", exit_code=e.returncode)
+        fatal("Failed to build the package!", exit_code=e.returncode)
 
 
 def create_tag(version: Semver) -> None:
-    info(f"Creating a new tag {version} from HEAD")
+    info(f"Creating a new tag {version} from HEAD...")
 
     if preview:
         return
@@ -169,7 +179,7 @@ def create_tag(version: Semver) -> None:
         git.create_tag(version, message=f"Version {version}")
     except CalledProcessError as e:
         error(e.stderr)
-        fatal("Failed to create a new tag", exit_code=e.returncode)
+        fatal("Failed to create a new tag!", exit_code=e.returncode)
 
 
 def commit_changes(semver: Semver, template: str) -> None:
@@ -185,7 +195,7 @@ def commit_changes(semver: Semver, template: str) -> None:
         git.commit(message)
     except CalledProcessError as e:
         error(e.stderr)
-        fatal("Failed to commit changes", exit_code=e.returncode)
+        fatal("Failed to commit changes!", exit_code=e.returncode)
 
 
 def bump_version(version: str) -> Semver:
@@ -198,7 +208,7 @@ def bump_version(version: str) -> Semver:
         next_version = poetry.bump(version)
     except CalledProcessError as e:
         error(e.stderr)
-        fatal("Failed to bump the version", exit_code=e.returncode)
+        fatal("Failed to bump the version!", exit_code=e.returncode)
 
     info(f"Bumped version from {current_version} to {next_version}")
 
@@ -206,7 +216,7 @@ def bump_version(version: str) -> Semver:
 
 
 def run_tests(script: str) -> None:
-    info(f"Running tests with '{script}'")
+    info(f"Running tests with '{script}' ...")
 
     if preview:
         return
@@ -215,11 +225,11 @@ def run_tests(script: str) -> None:
         poetry.run(script)
     except CalledProcessError as e:
         error(e.stderr)
-        fatal("Test run failed", exit_code=e.returncode)
+        fatal("The test runner reported an error!", exit_code=e.returncode)
 
 
 def install_dependencies() -> None:
-    info("Reinstalling project dependencies from pyproject.toml")
+    info("Reinstalling project dependencies from pyproject.toml...")
 
     if preview:
         return
@@ -228,14 +238,14 @@ def install_dependencies() -> None:
         poetry.install()
     except CalledProcessError as e:
         error(e.stderr)
-        fatal("Failed reinstalling the project dependencies", exit_code=e.returncode)
+        fatal("Failed reinstalling the project dependencies!", exit_code=e.returncode)
 
 
 def clean_up() -> None:
     if preview or git.is_working_directory_clean():
         return
 
-    info("Resetting working directory to a clean state")
+    info("Resetting working directory to a clean state...")
 
     try:
         git.stash()
@@ -243,7 +253,7 @@ def clean_up() -> None:
         git.pop()
     except CalledProcessError as e:
         error(e.stderr)
-        fatal("Failed to reset the working directory to a clean state", exit_code=e.returncode)
+        fatal("Failed to reset the working directory to a clean state!", exit_code=e.returncode)
 
 
 def verify_branch() -> None:
@@ -251,4 +261,4 @@ def verify_branch() -> None:
     release_branches = git.release_branches()
 
     if current_branch not in release_branches:
-        fatal(f"Current checked out branch {current_branch} is not a release branch {release_branches}")
+        fatal(f"Current checked out branch {current_branch} is not one of allowed release branches: {release_branches}")
