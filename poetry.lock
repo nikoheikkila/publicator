@@ -302,11 +302,11 @@ jupyter = ["ipywidgets (>=7.5.1,<8.0.0)"]
 
 [[package]]
 name = "safe-assert"
-version = "0.2.0"
+version = "0.4.0"
 description = "Safe assert for Python that can be used together with optimised mode"
 category = "main"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.7,<4.0"
 
 [[package]]
 name = "semmy"
@@ -371,7 +371,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<4.0.0"
-content-hash = "beb05f1d23f87ab0abcf6eba4e4e43d73474a7406090080660d57ee9d086a1b2"
+content-hash = "8c7e9511fbbbbefd2c46fc95746ee5cd5f937d8ca08d6860adc2f0227e34abe4"
 
 [metadata.files]
 atomicwrites = [
@@ -517,8 +517,8 @@ rich = [
     {file = "rich-12.5.1.tar.gz", hash = "sha256:63a5c5ce3673d3d5fbbf23cd87e11ab84b6b451436f1b7f19ec54b6bc36ed7ca"},
 ]
 safe-assert = [
-    {file = "safe-assert-0.2.0.tar.gz", hash = "sha256:ac010a2544a993c3b17f60e54e14e7c82c64a8d4ced810fbbef05b6efc855931"},
-    {file = "safe_assert-0.2.0-py3-none-any.whl", hash = "sha256:5f8138562945aa1e102159b64d5db33c32133b7a55de2dcda45d018018eb4c84"},
+    {file = "safe-assert-0.4.0.tar.gz", hash = "sha256:88c6bd08c73d8273db3426c1dc8a3623c190bfe347f337dab1cf0c586351469a"},
+    {file = "safe_assert-0.4.0-py3-none-any.whl", hash = "sha256:0de0fff39046d74ccd511af5b4682fe9f5660ff657d732450eb1c6c443e87258"},
 ]
 semmy = [
     {file = "semmy-1.0.0-py3-none-any.whl", hash = "sha256:e44e4928e2bab8cf68e05528b18824d8159e613a4976c4b9899db9e04707b1f0"},
