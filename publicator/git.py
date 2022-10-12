@@ -50,7 +50,7 @@ def current_branch() -> str:
 
 
 def release_branches() -> Tuple[str, str]:
-    return ("main", "master")
+    return "main", "master"
 
 
 def status() -> List[str]:
