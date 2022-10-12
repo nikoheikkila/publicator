@@ -12,4 +12,7 @@ def mock_shell(mocker: MockerFixture) -> MagicMock:
 
 @fixture()
 def mock_read_text(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch.object(Path, "read_text", autospec=True)
+    mocker.patch.object(Path, "is_file").return_value = True
+    mock = mocker.patch.object(Path, "read_text", autospec=True)
+
+    return mock
