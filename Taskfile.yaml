@@ -1,9 +1,6 @@
-# https://taskfile.dev
-
-version: '3'
+version: "3"
 
 tasks:
-
   install:
     desc: Install dependencies with Poetry
     sources:
