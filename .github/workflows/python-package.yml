@@ -24,10 +24,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.1.6
-        with:
-          poetry-version: 1.2
+      - name: Install Poetry ${{ env.POETRY_VERSION }}
+        run: |
+          python3 -m pip install --user pipx
+          python3 -m pipx ensurepath
+          pipx install poetry==$POETRY_VERSION
+        env:
+          POETRY_VERSION: "1.2.2"
 
       - name: Install dependencies
         run: |
