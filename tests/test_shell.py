@@ -2,6 +2,7 @@ from subprocess import CalledProcessError
 import sys
 from pytest import raises
 from publicator import shell
+from assertpy import assert_that as verify
 
 
 class TestShell:
@@ -10,16 +11,17 @@ class TestShell:
         return sys.platform.startswith("win")
 
     def test_run_with_empty_command(self) -> None:
-        result = shell.run("")
-        assert not result
+        verify(shell.run("")).is_empty()
 
     def test_run_with_single_command(self) -> None:
         result = shell.run('echo "Hello World!"')
-        assert result.pop() == "Hello World!"
+
+        verify(result.pop()).is_equal_to("Hello World!")
 
     def test_run_command_with_multiline_output(self) -> None:
         result = shell.run('echo "Hello\nWorld"')
-        assert result == ["Hello", "World"]
+
+        verify(result).is_length(2).contains("Hello", "World")
 
     def test_run_with_nonexistent_command(self) -> None:
         pattern = "The system cannot find the file specified" if self.is_windows() else "No such file or directory"

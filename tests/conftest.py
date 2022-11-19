@@ -2,6 +2,7 @@ from unittest.mock import MagicMock
 from pytest import fixture
 from pytest_mock import MockerFixture
 from pathlib import Path
+
 from publicator import shell
 
 
