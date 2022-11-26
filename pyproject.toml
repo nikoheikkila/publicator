@@ -11,7 +11,7 @@ documentation = "https://github.com/nikoheikkila/publicator/blob/main/README.md"
 keywords = [ "poetry", "tools", "packaging" ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0.0"
+python = ">=3.8.1,<4.0.0"
 colorama = "^0.4.4"
 parse = "^1.19.0"
 tomli = "2.0.1"
@@ -31,7 +31,7 @@ pytest = "^7.0.0"
 pytest-mock = "^3.6.1"
 mypy = "^0.991"
 black = "^22.1.0"
-flake8 = "^5.0.0"
+flake8 = "^6.0.0"
 hypothesis = "^6.36.1"
 assertpy = "^1.1"
 
