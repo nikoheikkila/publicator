@@ -27,7 +27,7 @@ publicator = "publicator.cli:app"
 "Discussions" = "https://github.com/nikoheikkila/publicator/discussions"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.0.0"
+pytest = "^8.0.0"
 pytest-mock = "^3.6.1"
 mypy = "^1.0"
 black = "^23.0.0"
